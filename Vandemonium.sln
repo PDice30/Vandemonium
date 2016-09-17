@@ -1,0 +1,23 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{22FE2468-FBE4-27F2-CD31-BD6BE72681F9}") = "Vandemonium", "Assembly-CSharp.csproj", "{AF35FEA2-3D6A-A586-9562-94B34A254EFF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AF35FEA2-3D6A-A586-9562-94B34A254EFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF35FEA2-3D6A-A586-9562-94B34A254EFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF35FEA2-3D6A-A586-9562-94B34A254EFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF35FEA2-3D6A-A586-9562-94B34A254EFF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+EndGlobal
