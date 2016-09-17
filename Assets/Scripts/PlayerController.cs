@@ -1,9 +1,13 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class PlayerController : MonoBehaviour {
 
 	private Transform playerTransform;
+
+	public Text hitText;
+	private int numberOfHits = 0;
 
 	//TODO:  Everything's base velocity should be based on the player's velocity
 	//That way if the player gets a "speed increase" or w/e, everything else will speed up as well
@@ -38,7 +42,7 @@ public class PlayerController : MonoBehaviour {
 		currentCamTransform = topCam;
 
 		//Based on player slowdown cam change level
-		cameraChangeTime = 1.0f;
+		cameraChangeTime = 0.5f;
 	}
 	
 	// Update is called once per frame
@@ -92,7 +96,7 @@ public class PlayerController : MonoBehaviour {
 
 	//Function to move camera should have inputs based on the player's camera slowdown level
 	private IEnumerator changeCamera(Transform targetCamTransform, float changeTime) {
-		Time.timeScale = 0.33f;
+		Time.timeScale = 0.25f;
 
 		float timeLeft = 0;
 		//while (playerCamTransform.position != targetCamTransform.position) {
@@ -109,5 +113,17 @@ public class PlayerController : MonoBehaviour {
 		isCameraMoving = false;
 		Debug.Log ("exiting coroutine:" + targetCamTransform.position);
 	}
+
+
+	void OnCollisionEnter(Collision coll) {
+		//Debug.Log ("col");
+		if (coll.gameObject.tag.Equals("EnemyCar")) {
+			Debug.Log ("col with enemycar");
+			Destroy (coll.gameObject);
+			numberOfHits += 1;
+			hitText.text = "Hits: " + numberOfHits;
+		}
+	}
+
 
 }
