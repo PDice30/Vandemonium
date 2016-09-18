@@ -34,6 +34,11 @@ public class PlayerController : MonoBehaviour {
 
 	private bool inputEnabled = true;
 	// Use this for initialization
+
+	void Awake() {
+		
+	}
+
 	void Start () {
 		playerTransform = gameObject.transform;
 		playerCamTransform = playerCamera.transform;
@@ -56,9 +61,9 @@ public class PlayerController : MonoBehaviour {
 		}
 
 		if (Input.GetKeyDown (KeyCode.U)) {
-			sceneController.SCENE_SPEED -= 0.1f;
+			sceneController.SCENE_SPEED -= 0.25f;
 		} else if (Input.GetKeyDown (KeyCode.I)) {
-			sceneController.SCENE_SPEED += 0.1f;
+			sceneController.SCENE_SPEED += 0.25f;
 		} 
 
 
@@ -108,6 +113,7 @@ public class PlayerController : MonoBehaviour {
 
 			timeLeft += Time.deltaTime;
 			playerCamTransform.position = Vector3.Lerp (currentCamTransform.position, targetCamTransform.position, (timeLeft / changeTime));
+			//Quaternion.Slerp here maybe?
 			playerCamTransform.rotation = Quaternion.Lerp (currentCamTransform.rotation, targetCamTransform.rotation, (timeLeft / changeTime));
 			yield return null;
 		}

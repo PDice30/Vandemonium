@@ -3,7 +3,7 @@ using System.Collections;
 
 public class CarSpawner : MonoBehaviour {
 
-	public PlayerController playerController;
+	public SceneController sceneController;
 
 	private float spawnInterval;
 	private float timeUntilNextSpawn;
@@ -18,31 +18,28 @@ public class CarSpawner : MonoBehaviour {
 	void Start () {
 		spawnInterval = SceneConstants.BASIC_CAR_SPAWN_TIME;
 		timeUntilNextSpawn = SceneConstants.BASIC_CAR_SPAWN_TIME;
+		enemyCarPrefab.GetComponent<EnemyCarMover> ().sceneController = sceneController;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if (timeUntilNextSpawn <= 0) {
 			GameObject newCar = Instantiate (enemyCarPrefab, new Vector3 (chooseLane (), 0, 25), Quaternion.identity) as GameObject;
-			randomizeCarStats (newCar);
+			setupNewCar (newCar);
 			timeUntilNextSpawn = spawnInterval;
 		}
 
-		timeUntilNextSpawn -= Time.deltaTime;
-
-
+		timeUntilNextSpawn -= (Time.deltaTime * sceneController.SCENE_SPEED);
 	}
-	private void randomizeCarStats(GameObject car) {
+
+	//Set up the position of the new car, its speed, etc.
+	private void setupNewCar(GameObject car) {
 		float length = Random.Range (1, 8);
 		float height = Random.Range (1, 5);
 		float velocity = Random.Range (1.0f, 4.0f) * SceneConstants.BASE_CAR_VELOCITY * playerLevel * playerDifficulty * carLevel;
-		car.GetComponent<EnemyCarMover> ().setVelocity (velocity);
+		EnemyCarMover mover = car.GetComponent<EnemyCarMover> ();
+		mover.setVelocity (velocity);
 		car.transform.localScale = new Vector3 (1, height, length);
-		//if (height > 1) {
-		//	float yPos = 1
-		//} else {
-		
-		//}
 		car.transform.position = new Vector3 (car.transform.position.x, height / 2, car.transform.position.z);
 	}
 
