@@ -6,10 +6,13 @@ public class PlayerController : MonoBehaviour {
 
 	private Transform playerTransform;
 
+	public SceneController sceneController;
+
 	public Text hitText;
 	private int numberOfHits = 0;
 
 	//TODO:  Everything's base velocity should be based on the player's velocity
+	// THIS IS LOCATED IN SCENECONTROLLER
 	//That way if the player gets a "speed increase" or w/e, everything else will speed up as well
 
 	private float cameraChangeTime;
@@ -22,11 +25,6 @@ public class PlayerController : MonoBehaviour {
 	public Transform topCam;
 	public Transform sideCam;
 	public Transform frontCam;
-
-	/******/
-	public float playerVelocity; // Used to determine the relative speed of everything else in the scene
-	public float playerVelocityMultiplier; // Maybe
-	/******/
 
 	public bool isCameraMoving = false;
 
@@ -42,7 +40,7 @@ public class PlayerController : MonoBehaviour {
 		currentCamTransform = topCam;
 
 		//Based on player slowdown cam change level
-		cameraChangeTime = 0.5f;
+		cameraChangeTime = 1.0f;
 	}
 	
 	// Update is called once per frame
@@ -56,6 +54,12 @@ public class PlayerController : MonoBehaviour {
 				StartCoroutine(moveDirection(1));
 			}
 		}
+
+		if (Input.GetKeyDown (KeyCode.U)) {
+			sceneController.SCENE_SPEED -= 0.1f;
+		} else if (Input.GetKeyDown (KeyCode.I)) {
+			sceneController.SCENE_SPEED += 0.1f;
+		} 
 
 
 
@@ -96,7 +100,7 @@ public class PlayerController : MonoBehaviour {
 
 	//Function to move camera should have inputs based on the player's camera slowdown level
 	private IEnumerator changeCamera(Transform targetCamTransform, float changeTime) {
-		Time.timeScale = 0.25f;
+		Time.timeScale = 0.5f;
 
 		float timeLeft = 0;
 		//while (playerCamTransform.position != targetCamTransform.position) {

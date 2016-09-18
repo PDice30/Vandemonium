@@ -36,7 +36,7 @@ public class CarSpawner : MonoBehaviour {
 		float length = Random.Range (1, 8);
 		float height = Random.Range (1, 5);
 		float velocity = Random.Range (1.0f, 4.0f) * SceneConstants.BASE_CAR_VELOCITY * playerLevel * playerDifficulty * carLevel;
-		car.GetComponent<Enemy_CarMovement> ().setVelocity (velocity);
+		car.GetComponent<EnemyCarMover> ().setVelocity (velocity);
 		car.transform.localScale = new Vector3 (1, height, length);
 		//if (height > 1) {
 		//	float yPos = 1

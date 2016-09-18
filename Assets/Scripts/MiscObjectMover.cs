@@ -4,23 +4,28 @@ using System.Collections;
 public class MiscObjectMover : MonoBehaviour {
 
 
-	private float _velocity;
-	// Use this for initialization
+	//This is probably bad, figure out a way to broadcast a message.
+	private float objVelocity;
+	//public GameObject sceneControllerObj;
+	public SceneController sceneController;
+
+	void Awake () {
+	//	sceneController = sceneControllerObj.GetComponent<SceneController> ();
+	}
 	void Start () {
 		
 	}
-	
-	// Update is called once per frame
+
 	void Update () {
 		//Add a check for the player's velocity
-		transform.Translate (0, 0, -(Time.deltaTime * _velocity));
+		transform.Translate (0, 0, -(Time.deltaTime * objVelocity * sceneController.SCENE_SPEED));
 		if (transform.position.z < -20) {
 			Destroy (gameObject);
 		}
 	}
 
 	public void setVelocity(float velocity) {
-		_velocity = velocity;
+		objVelocity = velocity;
 	}
 
 }
