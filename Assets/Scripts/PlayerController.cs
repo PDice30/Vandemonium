@@ -28,6 +28,9 @@ public class PlayerController : MonoBehaviour {
 
 	public bool isCameraMoving = false;
 
+	private bool isCarMovingLeft = false;
+	private bool isCarMovingRight = false;
+
 	//public float cameraChangeTime;
 	private float journeyLength;
 
@@ -85,6 +88,7 @@ public class PlayerController : MonoBehaviour {
 	public IEnumerator moveDirection(int dir) {
 		inputEnabled = false;
 		if (dir == 0) { // Move Left/Up (negative X)
+			isCarMovingLeft = true;
 			Vector3 newPos = playerTransform.position;
 			for (int i = 0; i < 10; i++) {
 				newPos.x -= 0.3f;
@@ -92,6 +96,7 @@ public class PlayerController : MonoBehaviour {
 				yield return null;
 			}
 		} else if (dir == 1) { // Move right/down (positive X)
+			isCarMovingRight = true;
 			Vector3 newPos = playerTransform.position;
 			for (int i = 0; i < 10; i++) {
 				newPos.x += 0.3f;
@@ -99,7 +104,10 @@ public class PlayerController : MonoBehaviour {
 				yield return null;
 			}
 		}
+		isCarMovingLeft = false;
+		isCarMovingRight = false;
 		inputEnabled = true;
+
 	}
 
 
@@ -128,10 +136,19 @@ public class PlayerController : MonoBehaviour {
 	void OnCollisionEnter(Collision coll) {
 		//Debug.Log ("col");
 		if (coll.gameObject.tag.Equals("EnemyCar")) {
-			Debug.Log ("col with enemycar");
-			Destroy (coll.gameObject);
-			numberOfHits += 1;
-			hitText.text = "Hits: " + numberOfHits;
+			if (coll.gameObject.GetComponent<Rigidbody> ().isKinematic) {
+				numberOfHits += 1;
+				hitText.text = "Hits: " + numberOfHits;
+				if (isCarMovingRight) {
+					coll.gameObject.GetComponent<EnemyCarMover> ().markForDestroy (0); // Parameter based on direction
+				} else if (isCarMovingLeft) {
+					coll.gameObject.GetComponent<EnemyCarMover> ().markForDestroy (1); // Parameter based on direction
+				} else {
+					coll.gameObject.GetComponent<EnemyCarMover> ().markForDestroy (2); // Parameter based on direction
+				}
+
+			}
+			//Destroy (coll.gameObject);
 		}
 	}
 

@@ -55,8 +55,14 @@
      <Compile Include="Assets\Scripts\SceneConstants.cs" />
      <Compile Include="Assets\Scripts\SceneController.cs" />
      <Compile Include="Assets\Scripts\TerrainSpawner.cs" />
+     <None Include="Assets\Images\Kenney - UI Pack\Spritesheet\redSheet.xml" />
      <None Include="Assets\Models\Kenney - Nature Pack Extended\Tools\Three.js (Blender)\readme.txt" />
      <None Include="Assets\Models\Kenney - Nature Pack Extended\License.txt" />
+     <None Include="Assets\Images\Kenney - UI Pack\Spritesheet\yellowSheet.xml" />
+     <None Include="Assets\Images\Kenney - UI Pack\Spritesheet\greySheet.xml" />
+     <None Include="Assets\Images\Kenney - UI Pack\license.txt" />
+     <None Include="Assets\Images\Kenney - UI Pack\Spritesheet\blueSheet.xml" />
+     <None Include="Assets\Images\Kenney - UI Pack\Spritesheet\greenSheet.xml" />
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

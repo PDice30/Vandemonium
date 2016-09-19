@@ -24,7 +24,7 @@ public class CarSpawner : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (timeUntilNextSpawn <= 0) {
-			GameObject newCar = Instantiate (enemyCarPrefab, new Vector3 (chooseLane (), 0, 25), Quaternion.identity) as GameObject;
+			GameObject newCar = Instantiate (enemyCarPrefab, new Vector3 (chooseLane (), 0, SceneConstants.OBJECT_SPAWN_POSITION), Quaternion.identity) as GameObject;
 			setupNewCar (newCar);
 			timeUntilNextSpawn = spawnInterval;
 		}

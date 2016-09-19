@@ -18,7 +18,7 @@ public class TerrainSpawner : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (timeUntilNextSpawn <= 0) {
-			GameObject newTerrain = Instantiate (treePrefabs[chooseTerrain(treePrefabs.Length)], new Vector3 (getXPos(), 0, 25), Quaternion.identity) as GameObject;
+			GameObject newTerrain = Instantiate (treePrefabs[chooseTerrain(treePrefabs.Length)], new Vector3 (getXPos(), 0, SceneConstants.OBJECT_SPAWN_POSITION), Quaternion.identity) as GameObject;
 			setupNewTerrain (newTerrain);
 			timeUntilNextSpawn = spawnInterval;
 		}
@@ -41,9 +41,9 @@ public class TerrainSpawner : MonoBehaviour {
 		int side = Random.Range (0, 2);
 
 		if (side == 0) { //Left Side - x between -8 and -14
-			return Random.Range(-14f, -8f);
+			return Random.Range(-13.5f, -7.5f);
 		} else { //Right Side - x between 8 and 14
-			return Random.Range(8f, 14f);
+			return Random.Range(8.5f, 14.5f);
 		}
 	}
 }

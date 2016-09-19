@@ -21,8 +21,11 @@ public class LightController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+		//mainLightSource.transform.Rotate (Vector3.right);
+		/*
 		if (timeUntilLightChange <= 0) {
-			mainLightSource.transform.Rotate (Vector3.right * 20);
+			mainLightSource.transform.Rotate (Vector3.right);
 			timeUntilLightChange = lightChangeInterval;
 			Debug.Log (mainLightSource.transform.rotation.eulerAngles.x);
 
@@ -34,13 +37,13 @@ public class LightController : MonoBehaviour {
 		} else {
 			PlayerSpotlight.GetComponent<Light> ().enabled = false;
 		}
-
+	
 		if (Input.GetKeyDown (KeyCode.N)) {
 			SunSource.GetComponent<Light> ().enabled = !SunSource.GetComponent<Light> ().enabled;
 			NightSource.GetComponent<Light> ().enabled = !NightSource.GetComponent<Light> ().enabled;
 			PlayerSpotlight.GetComponent<Light> ().enabled = !PlayerSpotlight.GetComponent<Light> ().enabled;
 		}
-
+*/
 		timeUntilLightChange -= (Time.deltaTime);
 
 

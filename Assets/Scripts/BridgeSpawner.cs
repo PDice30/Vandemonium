@@ -23,7 +23,7 @@ public class BridgeSpawner : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (timeUntilNextSpawn <= 0) {
-			GameObject newBridge = Instantiate (bridgePrefab, new Vector3 (0, 0, 25), Quaternion.identity) as GameObject;
+			GameObject newBridge = Instantiate (bridgePrefab, new Vector3 (0, 0, SceneConstants.OBJECT_SPAWN_POSITION), Quaternion.identity) as GameObject;
 			setupNewBridge (newBridge);
 			timeUntilNextSpawn = spawnInterval;
 		}
