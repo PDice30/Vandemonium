@@ -23,8 +23,8 @@ namespace UnityEngine {
 		public const float XFORCE_COLLISION_MAX = 600f;
 		public const float YFORCE_COLLISION_MIN = 200f;
 		public const float YFORCE_COLLISION_MAX = 600f;
-		public const float ZFORCE_COLLISION_MIN = 500f;
-		public const float ZFORCE_COLLISION_MAX = 800f;
+		public const float ZFORCE_COLLISION_MIN = 600f;
+		public const float ZFORCE_COLLISION_MAX = 1000f;
 
 
 		public const float DESTROY_OBJECT_POSITION = -20f; // z position behind car

@@ -1,17 +1,17 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/EnemyCarMover.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/PlayerController.cs">
     <Files>
+      <File FileName="Assets/Scripts/FPSCounter.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/LightController.cs" Line="25" Column="5" />
       <File FileName="Assets/Scripts/SceneConstants.cs" Line="27" Column="46" />
-      <File FileName="Assets/Scripts/PlayerController.cs" Line="148" Column="6" />
-      <File FileName="Assets/Scripts/SceneController.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/PlayerController.cs" Line="145" Column="30" />
+      <File FileName="Assets/Scripts/SceneController.cs" Line="11" Column="5" />
       <File FileName="Assets/Scripts/MiscObjectMover.cs" Line="9" Column="30" />
-      <File FileName="Assets/Scripts/BridgeSpawner.cs" Line="26" Column="109" NotebookId="1" />
-      <File FileName="Assets/Scripts/CarSpawner.cs" Line="27" Column="120" NotebookId="1" />
-      <File FileName="Assets/Scripts/FPSCounter.cs" Line="1" Column="1" NotebookId="1" />
-      <File FileName="Assets/Scripts/EnemyCarMover.cs" Line="82" Column="111" NotebookId="1" />
-      <File FileName="Assets/Scripts/TerrainSpawner.cs" Line="20" Column="33" NotebookId="1" />
+      <File FileName="Assets/Scripts/BridgeSpawner.cs" Line="1" Column="1" NotebookId="1" />
+      <File FileName="Assets/Scripts/CarSpawner.cs" Line="1" Column="1" NotebookId="1" />
+      <File FileName="Assets/Scripts/EnemyCarMover.cs" Line="93" Column="37" NotebookId="1" />
+      <File FileName="Assets/Scripts/TerrainSpawner.cs" Line="1" Column="1" NotebookId="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

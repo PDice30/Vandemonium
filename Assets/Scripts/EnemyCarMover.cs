@@ -89,6 +89,8 @@ public class EnemyCarMover : MonoBehaviour {
 		carRigidbody.AddTorque (new Vector3 (xForce, yForce, zForce));
 
 		//Time until destruction, change this
+		//Copy implementation from changeCamera in PlayerController
+		//Otherwise it varies on framerate
 		for (int i = 0; i < SceneConstants.TIME_UNTIL_DESTROY_CAR; i++) {
 			yield return null;
 		}

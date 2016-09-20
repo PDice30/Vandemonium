@@ -6,60 +6,72 @@ public class PlayerController : MonoBehaviour {
 
 	private Transform playerTransform;
 
+	public PlayerBuddy[] playerBuddies;
+	public GameObject playerBuddyPrefab;
+
+
 	public SceneController sceneController;
 
 	public Text hitText;
 	private int numberOfHits = 0;
 
-	//TODO:  Everything's base velocity should be based on the player's velocity
-	// THIS IS LOCATED IN SCENECONTROLLER
-	//That way if the player gets a "speed increase" or w/e, everything else will speed up as well
-
 	private float cameraChangeTime;
-	//Will just have the transforms here, not the cameras.
+	private float laneChangeTime;
+
 	public Camera playerCamera;
 	private Transform playerCamTransform;
-
 	private Transform currentCamTransform;
-
 	public Transform topCam;
 	public Transform sideCam;
 	public Transform frontCam;
 
-	public bool isCameraMoving = false;
 
+	public bool isCameraMoving = false;
 	private bool isCarMovingLeft = false;
 	private bool isCarMovingRight = false;
 
 	//public float cameraChangeTime;
 	private float journeyLength;
 
-
 	private bool inputEnabled = true;
 	// Use this for initialization
+
+	private Vector2 touchOrigin = -Vector2.one;
 
 	void Awake() {
 		
 	}
 
 	void Start () {
+		playerBuddies = new PlayerBuddy[5];
+		//All buddy code will be handled in the title scene, although
+		// it is possible some buddy addying code will be used during the game.
+
+
+		addPlayerBuddy ();
+
+
 		playerTransform = gameObject.transform;
 		playerCamTransform = playerCamera.transform;
 		currentCamTransform = topCam;
 
 		//Based on player slowdown cam change level
+		//cameraChangeTime = PlayerBuddySkills.checkSkills
 		cameraChangeTime = 1.0f;
+		laneChangeTime = 1.0f;
 	}
 	
 	// Update is called once per frame
 
 	//Lol just change all this shit to lerps, maybe?
 	void Update () {
+
+		//#if UNITY_EDITOR || UNITY_STANDALONE
 		if (inputEnabled) {
 			if (Input.GetKeyDown (KeyCode.A)) {
-				StartCoroutine(moveDirection(0));
+				StartCoroutine(attemptMoveDirection(-1, laneChangeTime));
 			} else if (Input.GetKeyDown (KeyCode.D)) {
-				StartCoroutine(moveDirection(1));
+				StartCoroutine(attemptMoveDirection(1, laneChangeTime));
 			}
 		}
 
@@ -81,39 +93,104 @@ public class PlayerController : MonoBehaviour {
 			isCameraMoving = true;
 			StartCoroutine(changeCamera(frontCam, cameraChangeTime));
 		}
+
+		//#else
+
+		int horizontal = 0;
+		int vertical = 0;
+
+
+		//Consider TouchScript
+		//Reads the player touches and responds with what direction they have swiped.
+		if (inputEnabled) {
+			if (Input.touchCount > 0) {
+				Touch playerTouch = Input.touches [0];
+				if (playerTouch.phase == TouchPhase.Began) {
+					touchOrigin = playerTouch.position;
+				} else if (playerTouch.phase == TouchPhase.Ended && touchOrigin.x >= 0) {
+					Vector2 touchEnd = playerTouch.position;
+					float x = touchEnd.x - touchOrigin.x;
+					float y = touchEnd.y - touchOrigin.y;
+					touchOrigin.x = -1;
+					if (Mathf.Abs (x) > Mathf.Abs (y)) {
+						horizontal = x > 0 ? 1 : -1;
+					} else {
+						vertical = y > 0 ? 1 : -1;
+					}
+				}
+			}
+
+			// After determining swipe direction, pass the direction into moveDirection
+			if ((horizontal != 0 && currentCamTransform == topCam)
+			    || (horizontal != 0 && currentCamTransform == frontCam)) {
+				StartCoroutine (attemptMoveDirection (horizontal, laneChangeTime));
+			} else if (vertical != 0 && currentCamTransform == sideCam) {
+				StartCoroutine (attemptMoveDirection (vertical, laneChangeTime));
+			}
+		}
+
+
+		//#endif
 			
 	}
 
+	// Timescale/Delta.Time should affect this, but check for buddy Skills
+	// Also check current Lane and if it can move to the next lane
+	public IEnumerator attemptMoveDirection(int direction, float laneChangeTime) {
+		//TODO
+		//Still need to check lane positions
+		//Need to account for player skills!
 
-	public IEnumerator moveDirection(int dir) {
+
+
+		float timeLeft = 0;
 		inputEnabled = false;
-		if (dir == 0) { // Move Left/Up (negative X)
+		if (direction == -1) { //Move left/Up, check for LANE!
 			isCarMovingLeft = true;
-			Vector3 newPos = playerTransform.position;
-			for (int i = 0; i < 10; i++) {
-				newPos.x -= 0.3f;
-				playerTransform.position = newPos;
+			float newXPos = playerTransform.position.x - 3.0f;
+			Vector3 originalPlayerPosition = playerTransform.position;
+			Vector3 newPlayerPosition = new Vector3 (newXPos, playerTransform.position.y, playerTransform.position.z);
+			while (timeLeft < laneChangeTime) {
+				timeLeft += Time.deltaTime;
+				playerTransform.position = Vector3.Lerp(originalPlayerPosition, newPlayerPosition, (timeLeft / laneChangeTime));
 				yield return null;
 			}
-		} else if (dir == 1) { // Move right/down (positive X)
+		} else if (direction == 1) { //Move right/down, check for LANE!
 			isCarMovingRight = true;
-			Vector3 newPos = playerTransform.position;
-			for (int i = 0; i < 10; i++) {
-				newPos.x += 0.3f;
-				playerTransform.position = newPos;
+			float newXPos = playerTransform.position.x + 3.0f;
+			Vector3 originalPlayerPosition = playerTransform.position;
+			Vector3 newPlayerPosition = new Vector3 (newXPos, playerTransform.position.y, playerTransform.position.z);
+			while (timeLeft < laneChangeTime) {
+				timeLeft += Time.deltaTime;
+				playerTransform.position = Vector3.Lerp(originalPlayerPosition, newPlayerPosition, (timeLeft / laneChangeTime));
 				yield return null;
 			}
 		}
+
 		isCarMovingLeft = false;
 		isCarMovingRight = false;
 		inputEnabled = true;
+
+
 
 	}
 
 
 	//Function to move camera should have inputs based on the player's camera slowdown level
 	private IEnumerator changeCamera(Transform targetCamTransform, float changeTime) {
-		Time.timeScale = 0.5f;
+
+		//Check skill for slowdown level
+		//Time.timeScale = 0.5f;
+		foreach (PlayerBuddy buddy in playerBuddies) {
+			if (buddy != null) {
+				Debug.Log("buddySkillEnum: " + buddy.buddySkillEnum + ". buddyPrimarySkillValue: " + buddy.buddyPrimarySkillValue);
+				if (buddy.buddySkillEnum == (int)BuddySkillEnum.ChangeCameraSlowdown) {
+					Time.timeScale = (Time.timeScale / buddy.buddyPrimarySkillValue);
+				}
+			}
+			//Read more into enum conversion and type checking
+
+		}
 
 		float timeLeft = 0;
 		//while (playerCamTransform.position != targetCamTransform.position) {
@@ -128,6 +205,7 @@ public class PlayerController : MonoBehaviour {
 
 		Time.timeScale = 1.0f;
 		currentCamTransform = targetCamTransform;
+		//playerCamTransform = targetCamTransform;
 		isCameraMoving = false;
 		Debug.Log ("exiting coroutine:" + targetCamTransform.position);
 	}
@@ -150,6 +228,15 @@ public class PlayerController : MonoBehaviour {
 			}
 			//Destroy (coll.gameObject);
 		}
+	}
+
+
+	public void addPlayerBuddy() {
+		GameObject tempBuddy = Instantiate (playerBuddyPrefab, new Vector3 (0, 20, 0), Quaternion.identity) as GameObject;
+		PlayerBuddy newBuddy = tempBuddy.GetComponent<PlayerBuddy> ();
+		newBuddy.buddySkillEnum = 0;
+		newBuddy.buddyPrimarySkillValue = 2;
+		playerBuddies [0] = newBuddy;
 	}
 
 
