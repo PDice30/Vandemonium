@@ -58,7 +58,7 @@ public class PlayerController : MonoBehaviour {
 		//Based on player slowdown cam change level
 		//cameraChangeTime = PlayerBuddySkills.checkSkills
 		cameraChangeTime = 1.0f;
-		laneChangeTime = 1.0f;
+		laneChangeTime = 0.5f;
 	}
 	
 	// Update is called once per frame
@@ -98,8 +98,6 @@ public class PlayerController : MonoBehaviour {
 
 		int horizontal = 0;
 		int vertical = 0;
-
-
 		//Consider TouchScript
 		//Reads the player touches and responds with what direction they have swiped.
 		if (inputEnabled) {
@@ -126,6 +124,14 @@ public class PlayerController : MonoBehaviour {
 				StartCoroutine (attemptMoveDirection (horizontal, laneChangeTime));
 			} else if (vertical != 0 && currentCamTransform == sideCam) {
 				StartCoroutine (attemptMoveDirection (vertical, laneChangeTime));
+
+				//Determine if its a temp camera change
+			} else if (currentCamTransform == topCam && vertical == 1) {
+				isCameraMoving = true;
+				StartCoroutine(changeCamera(frontCam, cameraChangeTime));
+			} else if (currentCamTransform == frontCam && vertical == 1) {
+				isCameraMoving = true;
+				StartCoroutine(changeCamera(topCam, cameraChangeTime));
 			}
 		}
 
