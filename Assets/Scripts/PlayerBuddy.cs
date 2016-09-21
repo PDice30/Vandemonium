@@ -3,28 +3,49 @@ using System.Collections;
 
 public class PlayerBuddy : MonoBehaviour {
 
-	/*
-	private int buddyId { public get; public set; }
-	private int buddySkillEnum { public get; public set; }
-	private string buddyName { get; set; }
-	private string buddyTitle { get; set; }
+	public int buddyId;
+	public int buddySkillEnum;
+	public string buddyName;
+	public string buddyTitle;
 
-	private float buddyPrimarySkillValue { get; set; }
-	private float buddySecondarySkillValue { get; set; }
-	private float buddyTertiarySkillValue { get; set; }
+	public int buddyLevel;
 
-*/ 
+	//The Chronologist
+	public float chronologist_cameraSlowdownPercentage = 0;
+	public float chronologist_cameraSlowdownTime = 0;
+	public float chronologist_relativePlayerSpeed = 0; // Or just a bool for normal speed?
+	// The Rocker
+	public bool rocker_carsDoCollide = false;
+	public float rocker_carsCollisionForce = 0;
+	public bool rocker_hasShieldUpgrade = false;
+	// The Radiologist
+	public float radiologist_xrayTime = 0;
+	public bool radiologist_hasNightVision = false;
+	// The Pilferer
+	public float pilferer_dayCoinBonus = 0;
+	public float pilferer_nightCoinBonus = 0;
+	public bool pilferer_canMarkCarWithTreasure = false;
+	// The Medium
+	public float medium_additionalCrystalFrequency = 0;
+	public float medium_crystalDurationBonus = 0;
+	public bool medium_invulnerableDuringCrystal = false;
+	// The Sidewinder
+	public float sidewinder_laneChangeSpeed = 0;
+	public bool sidewinder_hasTeleport = false;
+	// The Diviner
+	public float diviner_shieldDuration = 0;
+	public bool diviner_destroyAllCarsOnDamage = false;
+	// The Mechanic
+	public int mechanic_extraHealth = 0;
+	public float mechanic_additionalHealthSpawnFrequency = 0;
+	public bool mechanic_canActivateSavior = false;
+	// The Jester
+	public float jester_laneChangeFrequency = 0;
+	public float jester_cameraChangeRefillBonus = 0;
+	//The Doomsayer
+	public float doomsayer_speechBubbleFrequency = 0;
+	public bool doomsayer_canEnterBubbleBlast = false;
 
-	// TODO uhhh
-	public int buddySkillEnum { 
-		get;
-		set;
-	}
-
-	public int buddyPrimarySkillValue { 
-		get;
-		set;
-	}
 
 	// Use this for initialization
 	void Start () {
@@ -35,22 +56,6 @@ public class PlayerBuddy : MonoBehaviour {
 	void Update () {
 	
 	}
-	/*
-	public void useSkill() {
-	}
 
-	public int checkSkill() {
-		return buddySkillEnum;
-	}
-
-
-	public int getBuddyId() {
-		return buddyId;
-	}
-
-	public float getBuddyPrimarySkillValue() {
-		return buddyPrimarySkillValue;
-	}
-*/
 
 }

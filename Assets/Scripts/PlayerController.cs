@@ -12,12 +12,15 @@ public class PlayerController : MonoBehaviour {
 
 	public SceneController sceneController;
 
+	//Handled via the scene probably?
 	public Text hitText;
 	private int numberOfHits = 0;
 
+	//These might best be handled completely by the buddies, no need for two of the same vars
 	private float cameraChangeTime;
 	private float laneChangeTime;
 
+	//Cameras and transforms
 	public Camera playerCamera;
 	private Transform playerCamTransform;
 	private Transform currentCamTransform;
@@ -25,17 +28,20 @@ public class PlayerController : MonoBehaviour {
 	public Transform sideCam;
 	public Transform frontCam;
 
-
+	//Booleans
+	public bool isPlayerInvulnerable = false;
 	public bool isCameraMoving = false;
 	private bool isCarMovingLeft = false;
 	private bool isCarMovingRight = false;
 
 	//public float cameraChangeTime;
+	//Is this used?
 	private float journeyLength;
 
+	//Player is moving - allowed to move
 	private bool inputEnabled = true;
-	// Use this for initialization
 
+	//Touch init
 	private Vector2 touchOrigin = -Vector2.one;
 
 	void Awake() {
@@ -47,9 +53,8 @@ public class PlayerController : MonoBehaviour {
 		//All buddy code will be handled in the title scene, although
 		// it is possible some buddy addying code will be used during the game.
 
-
+		//Buddies will be added on Start from an object in the title screen that will load up the buddies
 		addPlayerBuddy ();
-
 
 		playerTransform = gameObject.transform;
 		playerCamTransform = playerCamera.transform;
@@ -57,13 +62,11 @@ public class PlayerController : MonoBehaviour {
 
 		//Based on player slowdown cam change level
 		//cameraChangeTime = PlayerBuddySkills.checkSkills
+		//This will likely not need to be stored at all by the player themselves
 		cameraChangeTime = 1.0f;
 		laneChangeTime = 0.5f;
 	}
-	
-	// Update is called once per frame
 
-	//Lol just change all this shit to lerps, maybe?
 	void Update () {
 
 		//#if UNITY_EDITOR || UNITY_STANDALONE
@@ -75,6 +78,7 @@ public class PlayerController : MonoBehaviour {
 			}
 		}
 
+		// Speed up or down the scene
 		if (Input.GetKeyDown (KeyCode.U)) {
 			sceneController.SCENE_SPEED -= 0.25f;
 		} else if (Input.GetKeyDown (KeyCode.I)) {
@@ -82,7 +86,7 @@ public class PlayerController : MonoBehaviour {
 		} 
 
 
-
+		//Move Camera - Debug based on keys
 		if (Input.GetKeyDown (KeyCode.T) && currentCamTransform != topCam && !isCameraMoving) {
 			isCameraMoving = true;
 			StartCoroutine(changeCamera(topCam, cameraChangeTime));
@@ -94,8 +98,9 @@ public class PlayerController : MonoBehaviour {
 			StartCoroutine(changeCamera(frontCam, cameraChangeTime));
 		}
 
-		//#else
 
+		///////////// Touch Events ///////////// - Uncomment the #s
+		//#else
 		int horizontal = 0;
 		int vertical = 0;
 		//Consider TouchScript
@@ -134,8 +139,6 @@ public class PlayerController : MonoBehaviour {
 				StartCoroutine(changeCamera(topCam, cameraChangeTime));
 			}
 		}
-
-
 		//#endif
 			
 	}
@@ -147,7 +150,8 @@ public class PlayerController : MonoBehaviour {
 		//Still need to check lane positions
 		//Need to account for player skills!
 
-
+		//BuddyCheck for Chronologist - If level 5: no slowdown of player
+		//BuddyCheck for Sidewinder - Adjust move speed of the player's lane change
 
 		float timeLeft = 0;
 		inputEnabled = false;
@@ -161,6 +165,9 @@ public class PlayerController : MonoBehaviour {
 				playerTransform.position = Vector3.Lerp(originalPlayerPosition, newPlayerPosition, (timeLeft / laneChangeTime));
 				yield return null;
 			}
+
+
+
 		} else if (direction == 1) { //Move right/down, check for LANE!
 			isCarMovingRight = true;
 			float newXPos = playerTransform.position.x + 3.0f;
@@ -187,19 +194,18 @@ public class PlayerController : MonoBehaviour {
 
 		//Check skill for slowdown level
 		//Time.timeScale = 0.5f;
+		//
 		foreach (PlayerBuddy buddy in playerBuddies) {
 			if (buddy != null) {
-				Debug.Log("buddySkillEnum: " + buddy.buddySkillEnum + ". buddyPrimarySkillValue: " + buddy.buddyPrimarySkillValue);
-				if (buddy.buddySkillEnum == (int)BuddySkillEnum.ChangeCameraSlowdown) {
-					Time.timeScale = (Time.timeScale / buddy.buddyPrimarySkillValue);
+				Debug.Log("buddySkillEnum: " + buddy.buddySkillEnum + ". buddyPrimarySkillValue: " + buddy.changeCameraSlowdown);
+				if (buddy.buddySkillEnum == (int)BuddySkillEnum.Chronologist) {
+					Time.timeScale = (Time.timeScale * buddy.chronologist_cameraSlowdownPercentage);
 				}
 			}
 			//Read more into enum conversion and type checking
-
 		}
 
 		float timeLeft = 0;
-		//while (playerCamTransform.position != targetCamTransform.position) {
 		while (timeLeft < changeTime) {
 
 			timeLeft += Time.deltaTime;
@@ -209,11 +215,10 @@ public class PlayerController : MonoBehaviour {
 			yield return null;
 		}
 
+		//Reset timescale if it was affected by a Buddy skill
 		Time.timeScale = 1.0f;
 		currentCamTransform = targetCamTransform;
-		//playerCamTransform = targetCamTransform;
 		isCameraMoving = false;
-		Debug.Log ("exiting coroutine:" + targetCamTransform.position);
 	}
 
 
@@ -240,8 +245,8 @@ public class PlayerController : MonoBehaviour {
 	public void addPlayerBuddy() {
 		GameObject tempBuddy = Instantiate (playerBuddyPrefab, new Vector3 (0, 20, 0), Quaternion.identity) as GameObject;
 		PlayerBuddy newBuddy = tempBuddy.GetComponent<PlayerBuddy> ();
-		newBuddy.buddySkillEnum = 0;
-		newBuddy.buddyPrimarySkillValue = 2;
+		newBuddy.buddySkillEnum = (int)BuddySkillEnum.Chronologist;
+		newBuddy.chronologist_cameraSlowdownPercentage = .5f;
 		playerBuddies [0] = newBuddy;
 	}
 

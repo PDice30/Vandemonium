@@ -2,6 +2,14 @@
 using System.Collections;
 
 public enum BuddySkillEnum {
-	ChangeCameraSlowdown = 0,
-	Rocker = 1
+	Chronologist = 0,
+	Rocker = 1,
+	Radiologist = 2,
+	Pilferer = 3,
+	Medium = 4,
+	Sidewinder = 5,
+	Diviner = 6,
+	Mechanic = 7,
+	Jester = 8,
+	Doomsayer = 9
 }

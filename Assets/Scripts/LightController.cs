@@ -37,14 +37,14 @@ public class LightController : MonoBehaviour {
 		} else {
 			PlayerSpotlight.GetComponent<Light> ().enabled = false;
 		}
-	
+*/
 		if (Input.GetKeyDown (KeyCode.N)) {
 			SunSource.GetComponent<Light> ().enabled = !SunSource.GetComponent<Light> ().enabled;
 			NightSource.GetComponent<Light> ().enabled = !NightSource.GetComponent<Light> ().enabled;
 			PlayerSpotlight.GetComponent<Light> ().enabled = !PlayerSpotlight.GetComponent<Light> ().enabled;
 		}
-*/
-		timeUntilLightChange -= (Time.deltaTime);
+
+		//timeUntilLightChange -= (Time.deltaTime);
 
 
 
