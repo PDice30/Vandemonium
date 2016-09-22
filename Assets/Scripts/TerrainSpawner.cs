@@ -33,10 +33,12 @@ public class TerrainSpawner : MonoBehaviour {
 		mover.setVelocity (SceneConstants.BASE_OBJECT_VELOCITY);
 	}
 
+	//Chooses which prefab to instantiate
 	private int chooseTerrain(int numberOfObjects) {
 		return Random.Range (0, numberOfObjects);
 	}
 
+	//Will need to be based on the current level width to not interfere with lanes
 	private float getXPos() {
 		int side = Random.Range (0, 2);
 

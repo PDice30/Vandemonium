@@ -4,7 +4,7 @@ using System.Collections;
 public class PlayerBuddy : MonoBehaviour {
 
 	public int buddyId;
-	public int buddySkillEnum;
+	public BuddySkillEnum buddySkillEnum;
 	public string buddyName;
 	public string buddyTitle;
 

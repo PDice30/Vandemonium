@@ -10,6 +10,7 @@ public class CarSpawner : MonoBehaviour {
 
 	public GameObject enemyCarPrefab;
 
+	//To be used for the speed multipliers, etc.
 	private int playerDifficulty = 1;
 	private int playerLevel = 1;
 	private int carLevel = 1;

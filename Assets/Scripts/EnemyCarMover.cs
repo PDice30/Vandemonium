@@ -10,7 +10,7 @@ public class EnemyCarMover : MonoBehaviour {
 	//public GameObject sceneControllerObj;
 	public SceneController sceneController;
 
-	private bool isMarkedForDestroy = false;
+	//private bool isMarkedForDestroy = false; // Currently not in use
 
 	private Rigidbody carRigidbody;
 
@@ -25,15 +25,13 @@ public class EnemyCarMover : MonoBehaviour {
 	
 
 	void Update () {
-		//Add a check for the player's velocity
+		//Possibly will remove its translate update when getting destroyed
 		//if (!isMarkedForDestroy) {
 			transform.Translate (0, 0, -(Time.deltaTime * carVelocity * sceneController.SCENE_SPEED), Space.World);
 			if (transform.position.z < SceneConstants.DESTROY_OBJECT_POSITION) {
 				Destroy (gameObject);
 			}
 		//} 
-
-
 	}
 
 
@@ -41,8 +39,9 @@ public class EnemyCarMover : MonoBehaviour {
 		carVelocity = velocity;
 	}
 
+	// Set up the car's colliders and physics properites so it can collide with the scene.
 	public void markForDestroy(int direction) {
-		isMarkedForDestroy = true;
+		//isMarkedForDestroy = true;
 		carRigidbody.useGravity = true;
 		carRigidbody.isKinematic = false;
 		StartCoroutine (moveAndDestroy(direction));
@@ -50,8 +49,8 @@ public class EnemyCarMover : MonoBehaviour {
 
 	void OnCollisionEnter(Collision coll) {
 		if (coll.gameObject.tag.Equals("EnemyCar")) {
-			/**********/
-			/* TODO: if (playerPowerup Actived to make it so they all collide!)
+			/**********
+			*BuddyCheck here for if car's should collide with each other
 			/*********/
 			Rigidbody collRigidbody = coll.gameObject.GetComponent<Rigidbody> ();
 			if (carRigidbody.isKinematic && collRigidbody.isKinematic) {
@@ -63,13 +62,14 @@ public class EnemyCarMover : MonoBehaviour {
 			} else { //Both are marked for destroy
 			
 			}
-
-
 		}
-
 	}
 
 
+	/***
+	 * Get the direction the player is moving and apply a force to the car in that direction
+	 * Destroy the actual object after TIME_UNTIL_DESTROY_CAR finishes
+	 */
 	private IEnumerator moveAndDestroy(int direction) {
 		float xForce, yForce, zForce;
 		if (direction == 0) { //Right

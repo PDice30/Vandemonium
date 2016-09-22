@@ -5,14 +5,14 @@ public class LightController : MonoBehaviour {
 
 	public Light mainLightSource;
 
-
 	public Light SunSource;
 	public Light NightSource;
 	public Light PlayerSpotlight;
 
-
+	/*  To be implemented
 	private float lightChangeInterval = 3.0f;
 	private float timeUntilLightChange = 3.0f;
+	*/
 
 	// Use this for initialization
 	void Start () {
@@ -21,7 +21,13 @@ public class LightController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (Input.GetKeyDown (KeyCode.N)) {
+			SunSource.GetComponent<Light> ().enabled = !SunSource.GetComponent<Light> ().enabled;
+			NightSource.GetComponent<Light> ().enabled = !NightSource.GetComponent<Light> ().enabled;
+			PlayerSpotlight.GetComponent<Light> ().enabled = !PlayerSpotlight.GetComponent<Light> ().enabled;
+		}
 
+		//timeUntilLightChange -= (Time.deltaTime);
 		//mainLightSource.transform.Rotate (Vector3.right);
 		/*
 		if (timeUntilLightChange <= 0) {
@@ -37,16 +43,6 @@ public class LightController : MonoBehaviour {
 		} else {
 			PlayerSpotlight.GetComponent<Light> ().enabled = false;
 		}
-*/
-		if (Input.GetKeyDown (KeyCode.N)) {
-			SunSource.GetComponent<Light> ().enabled = !SunSource.GetComponent<Light> ().enabled;
-			NightSource.GetComponent<Light> ().enabled = !NightSource.GetComponent<Light> ().enabled;
-			PlayerSpotlight.GetComponent<Light> ().enabled = !PlayerSpotlight.GetComponent<Light> ().enabled;
-		}
-
-		//timeUntilLightChange -= (Time.deltaTime);
-
-
-
+		*/
 	}
 }

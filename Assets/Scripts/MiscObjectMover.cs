@@ -3,16 +3,10 @@ using System.Collections;
 
 public class MiscObjectMover : MonoBehaviour {
 
-
-	//This is probably bad, figure out a way to broadcast a message.
 	private float objVelocity;
 	private float sceneVelocity;
-	//public GameObject sceneControllerObj;
 	public SceneController sceneController;
 
-	void Awake () {
-
-	}
 	void Start () {
 		
 	}

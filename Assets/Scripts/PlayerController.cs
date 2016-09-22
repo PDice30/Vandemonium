@@ -1,12 +1,15 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour {
 
 	private Transform playerTransform;
 
-	public PlayerBuddy[] playerBuddies;
+	//This should probably be a list? OrderedList, arraylist, array?
+	public List<PlayerBuddy> playerBuddies;
+	//public PlayerBuddy[] playerBuddies;
 	public GameObject playerBuddyPrefab;
 
 
@@ -49,12 +52,12 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void Start () {
-		playerBuddies = new PlayerBuddy[5];
+		playerBuddies = new List<PlayerBuddy> ();
 		//All buddy code will be handled in the title scene, although
 		// it is possible some buddy addying code will be used during the game.
 
 		//Buddies will be added on Start from an object in the title screen that will load up the buddies
-		addPlayerBuddy ();
+		addPlayerBuddy(BuddySkillEnum.Chronologist);
 
 		playerTransform = gameObject.transform;
 		playerCamTransform = playerCamera.transform;
@@ -191,20 +194,16 @@ public class PlayerController : MonoBehaviour {
 
 	//Function to move camera should have inputs based on the player's camera slowdown level
 	private IEnumerator changeCamera(Transform targetCamTransform, float changeTime) {
-
-		//Check skill for slowdown level
-		//Time.timeScale = 0.5f;
-		//
+		
 		foreach (PlayerBuddy buddy in playerBuddies) {
 			if (buddy != null) {
-				Debug.Log("buddySkillEnum: " + buddy.buddySkillEnum + ". buddyPrimarySkillValue: " + buddy.changeCameraSlowdown);
-				if (buddy.buddySkillEnum == (int)BuddySkillEnum.Chronologist) {
+				if (buddyCheck(buddy, BuddySkillEnum.Chronologist)) { // Returns true if buddy has that skill
 					Time.timeScale = (Time.timeScale * buddy.chronologist_cameraSlowdownPercentage);
 				}
 			}
-			//Read more into enum conversion and type checking
 		}
 
+		//Maybe set timeLeft higher and then subtract delta time? Makes more sense that way.
 		float timeLeft = 0;
 		while (timeLeft < changeTime) {
 
@@ -242,12 +241,20 @@ public class PlayerController : MonoBehaviour {
 	}
 
 
-	public void addPlayerBuddy() {
+	public void addPlayerBuddy(BuddySkillEnum skillEnum) {
 		GameObject tempBuddy = Instantiate (playerBuddyPrefab, new Vector3 (0, 20, 0), Quaternion.identity) as GameObject;
 		PlayerBuddy newBuddy = tempBuddy.GetComponent<PlayerBuddy> ();
-		newBuddy.buddySkillEnum = (int)BuddySkillEnum.Chronologist;
+		newBuddy.buddySkillEnum = skillEnum;
 		newBuddy.chronologist_cameraSlowdownPercentage = .5f;
-		playerBuddies [0] = newBuddy;
+		playerBuddies.Add (newBuddy);
+	}
+
+	public bool buddyCheck(PlayerBuddy buddy, BuddySkillEnum skillEnum) {
+		if (buddy.buddySkillEnum == skillEnum) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 

@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/*
+ * BuddySkillEnum - The ID/Value for the Buddy's title/skill
+ * Used when setting up the Buddy and used in every BuddyCheck
+ */
 public enum BuddySkillEnum {
 	Chronologist = 0,
 	Rocker = 1,

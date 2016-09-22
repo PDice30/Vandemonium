@@ -8,10 +8,10 @@ public class BridgeSpawner : MonoBehaviour {
 	private float spawnInterval;
 	private float timeUntilNextSpawn;
 
+	/* To be implemented
 	private int playerDifficulty = 1;
 	private int playerLevel = 1;
-	private int carLevel = 1;
-
+	*/
 	public GameObject bridgePrefab;
 
 	void Start () {
@@ -20,7 +20,7 @@ public class BridgeSpawner : MonoBehaviour {
 		bridgePrefab.GetComponent<MiscObjectMover> ().sceneController = sceneController;
 	}
 	
-	// Update is called once per frame
+
 	void Update () {
 		if (timeUntilNextSpawn <= 0) {
 			GameObject newBridge = Instantiate (bridgePrefab, new Vector3 (0, 0, SceneConstants.OBJECT_SPAWN_POSITION), Quaternion.identity) as GameObject;
@@ -31,6 +31,7 @@ public class BridgeSpawner : MonoBehaviour {
 		timeUntilNextSpawn -= (Time.deltaTime * sceneController.SCENE_SPEED);
 	}
 
+	//A new bridge object gets a MiscObjectMover component attached to it to move it through the scene
 	private void setupNewBridge(GameObject bridge) {
 		MiscObjectMover mover = bridge.GetComponent<MiscObjectMover> ();
 		mover.setVelocity (SceneConstants.BASE_OBJECT_VELOCITY);
