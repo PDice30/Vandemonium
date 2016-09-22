@@ -13,10 +13,10 @@ public class PlayerController : MonoBehaviour {
 	public GameObject playerBuddyPrefab;
 
 
-	public SceneController sceneController;
+	private SceneController sceneController;
 
 	//Handled via the scene probably?
-	public Text hitText;
+	private Text hitText;
 	private int numberOfHits = 0;
 
 	//These might best be handled completely by the buddies, no need for two of the same vars
@@ -24,12 +24,12 @@ public class PlayerController : MonoBehaviour {
 	private float laneChangeTime;
 
 	//Cameras and transforms
-	public Camera playerCamera;
+	private Camera playerCamera;
 	private Transform playerCamTransform;
 	private Transform currentCamTransform;
-	public Transform topCam;
-	public Transform sideCam;
-	public Transform frontCam;
+	private Transform topCam;
+	private Transform sideCam;
+	private Transform frontCam;
 
 	//Booleans
 	public bool isPlayerInvulnerable = false;
@@ -48,16 +48,27 @@ public class PlayerController : MonoBehaviour {
 	private Vector2 touchOrigin = -Vector2.one;
 
 	void Awake() {
-		
+		playerCamera = GameObject.Find ("PlayerCamera").GetComponent<Camera> ();
+		topCam = GameObject.Find ("TopCamera").GetComponent<Transform>();
+		sideCam = GameObject.Find ("SideCamera").GetComponent<Transform>();
+		frontCam = GameObject.Find ("FrontCamera").GetComponent<Transform>();
+		hitText = GameObject.Find ("HitText").GetComponent<Text>();
+		sceneController = GameObject.Find ("SceneController").GetComponent<SceneController> ();
 	}
 
 	void Start () {
-		playerBuddies = new List<PlayerBuddy> ();
+
+
+		//
+		//playerBuddies = new List<PlayerBuddy> ();
+		//Temp
+		playerBuddies = sceneController.playerBuddies;
 		//All buddy code will be handled in the title scene, although
 		// it is possible some buddy addying code will be used during the game.
 
 		//Buddies will be added on Start from an object in the title screen that will load up the buddies
-		addPlayerBuddy(BuddySkillEnum.Chronologist);
+		//Add buddies from the previous scene.
+		//addPlayerBuddy(BuddySkillEnum.Chronologist);
 
 		playerTransform = gameObject.transform;
 		playerCamTransform = playerCamera.transform;
@@ -238,15 +249,6 @@ public class PlayerController : MonoBehaviour {
 			}
 			//Destroy (coll.gameObject);
 		}
-	}
-
-
-	public void addPlayerBuddy(BuddySkillEnum skillEnum) {
-		GameObject tempBuddy = Instantiate (playerBuddyPrefab, new Vector3 (0, 20, 0), Quaternion.identity) as GameObject;
-		PlayerBuddy newBuddy = tempBuddy.GetComponent<PlayerBuddy> ();
-		newBuddy.buddySkillEnum = skillEnum;
-		newBuddy.chronologist_cameraSlowdownPercentage = .5f;
-		playerBuddies.Add (newBuddy);
 	}
 
 	public bool buddyCheck(PlayerBuddy buddy, BuddySkillEnum skillEnum) {

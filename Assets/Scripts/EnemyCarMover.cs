@@ -15,6 +15,7 @@ public class EnemyCarMover : MonoBehaviour {
 	private Rigidbody carRigidbody;
 
 	void Awake() {
+		sceneController = GameObject.Find ("SceneController").GetComponent<SceneController>();
 		carRigidbody = gameObject.GetComponent<Rigidbody> ();
 	}
 

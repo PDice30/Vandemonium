@@ -14,12 +14,15 @@ public class BridgeSpawner : MonoBehaviour {
 	*/
 	public GameObject bridgePrefab;
 
+	void Awake() {
+		sceneController = GameObject.Find ("SceneController").GetComponent<SceneController>();
+	}
+
 	void Start () {
 		spawnInterval = SceneConstants.BASIC_BRIDGE_SPAWN_TIME;
 		timeUntilNextSpawn = SceneConstants.BASIC_BRIDGE_SPAWN_TIME / 2;
 		bridgePrefab.GetComponent<MiscObjectMover> ().sceneController = sceneController;
 	}
-	
 
 	void Update () {
 		if (timeUntilNextSpawn <= 0) {

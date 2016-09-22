@@ -18,11 +18,16 @@ public class LightController : MonoBehaviour {
 	void Start () {
 		
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		if (Input.GetKeyDown (KeyCode.N)) {
 			SunSource.GetComponent<Light> ().enabled = !SunSource.GetComponent<Light> ().enabled;
+			if (!SunSource.GetComponent<Light> ().enabled) {
+				RenderSettings.ambientIntensity = 0;
+			} else {
+				RenderSettings.ambientIntensity = 1;
+			}
 			NightSource.GetComponent<Light> ().enabled = !NightSource.GetComponent<Light> ().enabled;
 			PlayerSpotlight.GetComponent<Light> ().enabled = !PlayerSpotlight.GetComponent<Light> ().enabled;
 		}

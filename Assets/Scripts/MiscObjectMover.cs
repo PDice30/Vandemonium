@@ -7,6 +7,10 @@ public class MiscObjectMover : MonoBehaviour {
 	private float sceneVelocity;
 	public SceneController sceneController;
 
+	void Awake() {
+		sceneController = GameObject.Find ("SceneController").GetComponent<SceneController>();
+	}
+
 	void Start () {
 		
 	}

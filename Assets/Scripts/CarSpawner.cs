@@ -16,6 +16,10 @@ public class CarSpawner : MonoBehaviour {
 	private int carLevel = 1;
 
 	// Use this for initialization
+	void Awake() {
+		sceneController = GameObject.Find ("SceneController").GetComponent<SceneController>();
+	}
+
 	void Start () {
 		spawnInterval = SceneConstants.BASIC_CAR_SPAWN_TIME;
 		timeUntilNextSpawn = SceneConstants.BASIC_CAR_SPAWN_TIME;

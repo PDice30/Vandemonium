@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+//TODO Maybe not a mono behavior?
 public class PlayerBuddy : MonoBehaviour {
 
 	public int buddyId;

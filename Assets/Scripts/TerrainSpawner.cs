@@ -10,6 +10,10 @@ public class TerrainSpawner : MonoBehaviour {
 
 	public GameObject[] treePrefabs = new GameObject[5]; 
 	// Use this for initialization
+	void Awake() {
+		sceneController = GameObject.Find ("SceneController").GetComponent<SceneController>();
+	}
+
 	void Start () {
 		spawnInterval = SceneConstants.BASIC_TERRAIN_SPAWN_TIME;
 		timeUntilNextSpawn = SceneConstants.BASIC_TERRAIN_SPAWN_TIME;
