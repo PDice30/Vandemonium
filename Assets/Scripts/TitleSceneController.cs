@@ -7,11 +7,11 @@ using System.Collections.Generic;
 public class TitleSceneController : MonoBehaviour {
 
 	// Use this for initialization
-	public Button buddyOneSelectButton;
-	public Button buddyTwoSelectButton;
-	public Button buddyThreeSelectButton;
-	public Button buddyFourSelectButton;
-	public Button buddyFiveSelectButton;
+	public Button buddyOneChosenButton;
+	public Button buddyTwoChosenButton;
+	public Button buddyThreeChosenButton;
+	public Button buddyFourChosenButton;
+	public Button buddyFiveChosenButton;
 
 	public GameObject startButtonObject;
 
