@@ -45,6 +45,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\ChosenBuddy.cs" />
      <Compile Include="Assets\Scripts\BridgeSpawner.cs" />
      <Compile Include="Assets\Scripts\BuddySkillEnum.cs" />
      <Compile Include="Assets\Scripts\CarSpawner.cs" />

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+//This should probably be a ScriptableObject
 //TODO Maybe not a mono behavior?
 public class PlayerBuddy : MonoBehaviour {
 
@@ -8,6 +9,8 @@ public class PlayerBuddy : MonoBehaviour {
 	public BuddySkillEnum buddySkillEnum;
 	public string buddyName;
 	public string buddyTitle;
+
+	public int isUnlocked = 0; //Int for PlayerPrefs
 
 	public int buddyLevel;
 
@@ -56,6 +59,43 @@ public class PlayerBuddy : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	
+	}
+
+	public void copyValues(PlayerBuddy copiedBuddy) {
+		copiedBuddy.buddyId = buddyId;
+	}
+
+	public void getBuddyStats() {
+		switch (buddySkillEnum) {
+		case BuddySkillEnum.Chronologist:
+			buddyId = 0;
+			buddyName = "Tyme Weaver";
+			buddyTitle = "The Chronologist";
+			isUnlocked = PlayerPrefs.GetInt ("Player_HasUnlockedChronologist");
+			buddyLevel = PlayerPrefs.GetInt ("Buddy_ChronologistLevel");
+			chronologist_cameraSlowdownPercentage = PlayerPrefs.GetFloat ("Buddy_Chronologist_CameraSlowdownPercentage");
+			chronologist_cameraSlowdownTime = PlayerPrefs.GetFloat ("Buddy_Chronologist_CameraSlowdownTime");
+			chronologist_relativePlayerSpeed = PlayerPrefs.GetFloat ("Buddy_Chronologist_RelativePlayerSpeed");
+			break;
+		case BuddySkillEnum.Rocker:
+			buddyId = 1;
+			buddyName = "Oswald Oswaldian";
+			buddyTitle = "The Rocker";
+			isUnlocked = PlayerPrefs.GetInt ("Player_HasUnlockedRocker");
+			buddyLevel = PlayerPrefs.GetInt ("Buddy_Rocker_Level");
+			int temp_rocker_carsDoCollide = PlayerPrefs.GetInt ("Buddy_Rocker_CarsDoCollide");
+			if (temp_rocker_carsDoCollide == 1) {
+				rocker_carsDoCollide = true;
+			}
+
+			chronologist_cameraSlowdownTime = PlayerPrefs.GetFloat ("Buddy_Chronologist_CameraSlowdownTime");
+			chronologist_relativePlayerSpeed = PlayerPrefs.GetFloat ("Buddy_Chronologist_RelativePlayerSpeed");
+			break;
+		default:
+			return;
+		}
+
+
 	}
 
 

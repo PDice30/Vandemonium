@@ -11,6 +11,7 @@ public class SceneController : MonoBehaviour {
 
 	private TitleSceneController titleSceneController;
 
+
 	public List<PlayerBuddy> playerBuddies;
 
 	public GameObject playerCarPrefab;
@@ -23,7 +24,10 @@ public class SceneController : MonoBehaviour {
 		//RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Skybox;
 		//RenderSettings.ambientIntensity = 1;
 		titleSceneController = GameObject.Find("TitleSceneController").GetComponent<TitleSceneController>();
-		getBuddies (titleSceneController.playerBuddies);
+
+		getBuddies (titleSceneController.chosenPlayerBuddies);
+		//getBuddyObjects(titleSceneController.playerBuddyObjects);
+
 		//addPlayerBuddy (BuddySkillEnum.Chronologist);
 		SCENE_SPEED = SceneConstants.BASE_SCENE_SPEED;
 
@@ -47,6 +51,10 @@ public class SceneController : MonoBehaviour {
 	public void getBuddies(List<PlayerBuddy> buddies) {
 		playerBuddies = buddies;
 	}
+	/*
+	public void getBuddies(List<PlayerBuddy> buddies) {
+		playerBuddies = buddies;
+	}
 
 	public void addPlayerBuddy(BuddySkillEnum skillEnum) {
 		GameObject tempBuddy = Instantiate (playerBuddyPrefab, new Vector3 (0, 20, 0), Quaternion.identity) as GameObject;
@@ -56,6 +64,7 @@ public class SceneController : MonoBehaviour {
 		newBuddy.chronologist_cameraSlowdownPercentage = .5f;
 		playerBuddies.Add (newBuddy);
 	}
+	*/
 }
 
 

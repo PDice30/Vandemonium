@@ -58,11 +58,9 @@ public class PlayerController : MonoBehaviour {
 
 	void Start () {
 
-
-		//
-		//playerBuddies = new List<PlayerBuddy> ();
-		//Temp
 		playerBuddies = sceneController.playerBuddies;
+
+
 		//All buddy code will be handled in the title scene, although
 		// it is possible some buddy addying code will be used during the game.
 
