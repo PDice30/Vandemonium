@@ -22,6 +22,8 @@ public class TitleSceneController : MonoBehaviour {
 
 	public GameObject buddyScrollViewContent;
 
+	public Sprite[] buddyImages = new Sprite[SceneConstants.NUMBER_OF_PLAYER_BUDDIES];
+
 	public List<PlayerBuddy> allPlayerBuddies;
 	public List<PlayerBuddy> chosenPlayerBuddies;
 	public List<GameObject> listOfChosenBuddies;
@@ -51,7 +53,7 @@ public class TitleSceneController : MonoBehaviour {
 		for (int i = 0; i < SceneConstants.NUMBER_OF_PLAYER_BUDDIES; i++) {
 			GameObject newObject = new GameObject ();
 			PlayerBuddy playerBuddy = newObject.AddComponent<PlayerBuddy> ();
-
+			playerBuddy.buddyId = i;
 			playerBuddy.buddySkillEnum = (BuddySkillEnum)i;
 			newObject.name = playerBuddy.buddySkillEnum.ToString ();
 			playerBuddy.getBuddyStats ();
@@ -81,6 +83,8 @@ public class TitleSceneController : MonoBehaviour {
 			}
 
 			//Set Image of this button
+			newPlayerBuddy.GetComponent<Button>().image.sprite = buddyImages[i];
+
 			//The Newlw created button references the buddy created from this script
 			newPlayerBuddy.GetComponent<Button> ().onClick.AddListener(() => { 
 				buddyScrollButtonClicked(playerBuddy); 
@@ -89,6 +93,7 @@ public class TitleSceneController : MonoBehaviour {
 		}
 	}
 
+	//RENAME!
 	void Start () {
 		allPlayerBuddies = new List<PlayerBuddy> ();
 
@@ -125,18 +130,33 @@ public class TitleSceneController : MonoBehaviour {
 	}
 
 
-
+	//Instead, pass an int as well to represent the image index
 	public void buddyScrollButtonClicked(PlayerBuddy buddy) {
 
 		Debug.Log ("added player buddy object:" + buddy.name);
 
 		//buddyCurrentlySelected.GetComponent<Button>().image.sprite = buddy.GetComponent<Button>().image.sprite;
 		buddyCurrentlySelected.GetComponent<ChosenBuddy> ().buddy = buddy;
+		Debug.Log (buddy.buddyId);
+		buddyCurrentlySelected.GetComponent<Button> ().image.sprite = buddyImages [buddy.buddyId];
 		chooseBuddyPanel.SetActive (false);
 		buddyScrollView.SetActive (false);
 		startButtonObject.SetActive (true);
 
 	}
+	/*
+	public void buddyScrollButtonClicked(PlayerBuddy buddy) {
+
+		Debug.Log ("added player buddy object:" + buddy.name);
+
+		//buddyCurrentlySelected.GetComponent<Button>().image.sprite = buddy.GetComponent<Button>().image.sprite;
+		buddyCurrentlySelected.GetComponent<ChosenBuddy> ().buddy = buddy;
+		//buddyCurrentlySelected
+		chooseBuddyPanel.SetActive (false);
+		buddyScrollView.SetActive (false);
+		startButtonObject.SetActive (true);
+
+	}*/
 
 	public void buddySelectedButtonClicked(Button buddyButton) {
 		buddyCurrentlySelected = buddyButton.gameObject;

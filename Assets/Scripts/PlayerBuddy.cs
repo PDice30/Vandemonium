@@ -69,11 +69,11 @@ public class PlayerBuddy : MonoBehaviour {
 		switch (buddySkillEnum) {
 		case BuddySkillEnum.Chronologist:
 			buddyId = 0;
-			buddyName = "Tyme Weaver";
-			buddyTitle = "The Chronologist";
-			isUnlocked = PlayerPrefs.GetInt ("Player_HasUnlockedChronologist");
-			buddyLevel = PlayerPrefs.GetInt ("Buddy_ChronologistLevel");
-			chronologist_cameraSlowdownPercentage = PlayerPrefs.GetFloat ("Buddy_Chronologist_CameraSlowdownPercentage");
+			buddyName = PlayerConstants.buddy_chronologist_name;
+			buddyTitle = PlayerConstants.buddy_chronologist_title;
+			isUnlocked = PlayerPrefs.GetInt (PlayerConstants.Player_HasUnlockedChronologist);
+			buddyLevel = PlayerPrefs.GetInt (PlayerConstants.Buddy_Chronologist_Level);
+			chronologist_cameraSlowdownPercentage = PlayerPrefs.GetFloat (PlayerConstants.Buddy_Chronologist_CameraSlowdownPercentage);
 			chronologist_cameraSlowdownTime = PlayerPrefs.GetFloat ("Buddy_Chronologist_CameraSlowdownTime");
 			chronologist_relativePlayerSpeed = PlayerPrefs.GetFloat ("Buddy_Chronologist_RelativePlayerSpeed");
 			break;
@@ -81,7 +81,7 @@ public class PlayerBuddy : MonoBehaviour {
 			buddyId = 1;
 			buddyName = "Oswald Oswaldian";
 			buddyTitle = "The Rocker";
-			isUnlocked = PlayerPrefs.GetInt ("Player_HasUnlockedRocker");
+			isUnlocked = PlayerPrefs.GetInt (PlayerConstants.Player_HasUnlockedRocker);
 			buddyLevel = PlayerPrefs.GetInt ("Buddy_Rocker_Level");
 			int temp_rocker_carsDoCollide = PlayerPrefs.GetInt ("Buddy_Rocker_CarsDoCollide");
 			if (temp_rocker_carsDoCollide == 1) {

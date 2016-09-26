@@ -32,6 +32,13 @@ namespace UnityEngine {
 		public const int TIME_UNTIL_DESTROY_CAR = 90;
 
 		public const int NUMBER_OF_PLAYER_BUDDIES = 10;
+
+
+
+
+
+
+
 	}
 }
 		
