@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour {
 	public GameObject playerBuddyPrefab;
 
 
-	private SceneController sceneController;
+	private LevelSceneController levelSceneController;
 
 	//Handled via the scene probably?
 	private Text hitText;
@@ -53,14 +53,16 @@ public class PlayerController : MonoBehaviour {
 		sideCam = GameObject.Find ("SideCamera").GetComponent<Transform>();
 		frontCam = GameObject.Find ("FrontCamera").GetComponent<Transform>();
 		hitText = GameObject.Find ("HitText").GetComponent<Text>();
-		sceneController = GameObject.Find ("SceneController").GetComponent<SceneController> ();
+		levelSceneController = GameObject.Find ("LevelSceneController").GetComponent<LevelSceneController> ();
 	}
 
 	void Start () {
 
-		playerBuddies = sceneController.playerBuddies;
+		playerBuddies = levelSceneController.playerBuddies;
 
-
+		foreach (PlayerBuddy buddy in playerBuddies) {
+			Debug.Log ("Buddy: " + buddy.buddySkillEnum.ToString ());
+		}
 		//All buddy code will be handled in the title scene, although
 		// it is possible some buddy addying code will be used during the game.
 
@@ -92,9 +94,9 @@ public class PlayerController : MonoBehaviour {
 
 		// Speed up or down the scene
 		if (Input.GetKeyDown (KeyCode.U)) {
-			sceneController.SCENE_SPEED -= 0.25f;
+			levelSceneController.SCENE_SPEED -= 0.25f;
 		} else if (Input.GetKeyDown (KeyCode.I)) {
-			sceneController.SCENE_SPEED += 0.25f;
+			levelSceneController.SCENE_SPEED += 0.25f;
 		} 
 
 

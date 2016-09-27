@@ -8,14 +8,14 @@ public class EnemyCarMover : MonoBehaviour {
 	private float carVelocity;
 	private float sceneVelocity;
 	//public GameObject sceneControllerObj;
-	public SceneController sceneController;
+	public LevelSceneController levelSceneController;
 
 	//private bool isMarkedForDestroy = false; // Currently not in use
 
 	private Rigidbody carRigidbody;
 
 	void Awake() {
-		sceneController = GameObject.Find ("SceneController").GetComponent<SceneController>();
+		levelSceneController = GameObject.Find ("LevelSceneController").GetComponent<LevelSceneController>();
 		carRigidbody = gameObject.GetComponent<Rigidbody> ();
 	}
 
@@ -28,7 +28,7 @@ public class EnemyCarMover : MonoBehaviour {
 	void Update () {
 		//Possibly will remove its translate update when getting destroyed
 		//if (!isMarkedForDestroy) {
-			transform.Translate (0, 0, -(Time.deltaTime * carVelocity * sceneController.SCENE_SPEED), Space.World);
+			transform.Translate (0, 0, -(Time.deltaTime * carVelocity * levelSceneController.SCENE_SPEED), Space.World);
 			if (transform.position.z < SceneConstants.DESTROY_OBJECT_POSITION) {
 				Destroy (gameObject);
 			}

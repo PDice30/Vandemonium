@@ -38,7 +38,7 @@ public class TitleSceneController : MonoBehaviour {
 
 	private GameObject buddyCurrentlySelected;
 
-	public SceneController sceneController;
+	public LevelSceneController levelSceneController;
 
 	void Awake () {
 		//Setup/Get PlayerPrefs
@@ -221,5 +221,7 @@ public class TitleSceneController : MonoBehaviour {
 		PlayerPrefs.SetInt ("Buddy_ChronologistLevel", 1);
 		PlayerPrefs.SetFloat ("Buddy_CameraSlowdownPercentage", 0.5f);
 	}
+		
+
 
 }

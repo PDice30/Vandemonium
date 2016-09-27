@@ -45,22 +45,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\ChosenBuddy.cs" />
      <Compile Include="Assets\Scripts\BridgeSpawner.cs" />
      <Compile Include="Assets\Scripts\BuddySkillEnum.cs" />
      <Compile Include="Assets\Scripts\CarSpawner.cs" />
+     <Compile Include="Assets\Scripts\ChosenBuddy.cs" />
      <Compile Include="Assets\Scripts\CubeRotation.cs" />
      <Compile Include="Assets\Scripts\EnemyCarMover.cs" />
      <Compile Include="Assets\Scripts\FPSCounter.cs" />
+     <Compile Include="Assets\Scripts\LevelSceneController.cs" />
      <Compile Include="Assets\Scripts\LightController.cs" />
      <Compile Include="Assets\Scripts\MiscObjectMover.cs" />
      <Compile Include="Assets\Scripts\PlayerBuddy.cs" />
      <Compile Include="Assets\Scripts\PlayerConstants.cs" />
      <Compile Include="Assets\Scripts\PlayerController.cs" />
      <Compile Include="Assets\Scripts\SceneConstants.cs" />
-     <Compile Include="Assets\Scripts\SceneController.cs" />
      <Compile Include="Assets\Scripts\TerrainSpawner.cs" />
      <Compile Include="Assets\Scripts\TitleSceneController.cs" />
+     <Compile Include="Assets\Scripts\TitleWithVanSceneController.cs" />
      <None Include="Assets\Images\Kenney - UI Pack\Spritesheet\redSheet.xml" />
      <None Include="Assets\Models\Kenney - Nature Pack Extended\Tools\Three.js (Blender)\readme.txt" />
      <None Include="Assets\Models\Kenney - Nature Pack Extended\License.txt" />

@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 //TODO are two scene controllers even necessary?
-public class SceneController : MonoBehaviour {
+public class LevelSceneController : MonoBehaviour {
 
 	public LightController lightController;
 
@@ -15,7 +15,6 @@ public class SceneController : MonoBehaviour {
 	public List<PlayerBuddy> playerBuddies;
 
 	public GameObject playerCarPrefab;
-	public GameObject playerBuddyPrefab;
 
 	public float SCENE_SPEED;
 

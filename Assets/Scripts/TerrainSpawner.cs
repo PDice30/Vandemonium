@@ -3,7 +3,7 @@ using System.Collections;
 
 public class TerrainSpawner : MonoBehaviour {
 
-	public SceneController sceneController;
+	public LevelSceneController levelSceneController;
 
 	private float spawnInterval;
 	private float timeUntilNextSpawn;
@@ -11,7 +11,7 @@ public class TerrainSpawner : MonoBehaviour {
 	public GameObject[] treePrefabs = new GameObject[5]; 
 	// Use this for initialization
 	void Awake() {
-		sceneController = GameObject.Find ("SceneController").GetComponent<SceneController>();
+		levelSceneController = GameObject.Find ("LevelSceneController").GetComponent<LevelSceneController>();
 	}
 
 	void Start () {
@@ -27,13 +27,13 @@ public class TerrainSpawner : MonoBehaviour {
 			timeUntilNextSpawn = spawnInterval;
 		}
 
-		timeUntilNextSpawn -= (Time.deltaTime * sceneController.SCENE_SPEED);
+		timeUntilNextSpawn -= (Time.deltaTime * levelSceneController.SCENE_SPEED);
 	}
 
 	//Set up the position of the new car, its speed, etc.
 	private void setupNewTerrain(GameObject terrain) {
 		MiscObjectMover mover = terrain.AddComponent<MiscObjectMover> ();
-		mover.sceneController = sceneController;
+		mover.levelSceneController = levelSceneController;
 		mover.setVelocity (SceneConstants.BASE_OBJECT_VELOCITY);
 	}
 
