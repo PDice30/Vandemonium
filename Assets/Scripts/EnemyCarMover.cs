@@ -14,6 +14,8 @@ public class EnemyCarMover : MonoBehaviour {
 
 	private Rigidbody carRigidbody;
 
+	//Make sure this is all hooked up properly with the finding of the levelSceneController
+	//Why is this not hooked up in the editor?
 	void Awake() {
 		levelSceneController = GameObject.Find ("LevelSceneController").GetComponent<LevelSceneController>();
 		carRigidbody = gameObject.GetComponent<Rigidbody> ();

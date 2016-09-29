@@ -15,6 +15,13 @@ public class LevelSceneController : MonoBehaviour {
 	public List<PlayerBuddy> playerBuddies;
 
 	public GameObject playerCarPrefab;
+	private GameObject playerCar;
+
+	public Text numberOfCoinsText;
+	public Text numberOfHitsText;
+
+	public float numberOfCoins = 0;
+	public float numberOfHits = 0;
 
 	public float SCENE_SPEED;
 
@@ -34,6 +41,7 @@ public class LevelSceneController : MonoBehaviour {
 
 	void Start () {
 		GameObject playerCar = Instantiate (playerCarPrefab, new Vector3 (0f, 0.5f, -10f), Quaternion.identity) as GameObject;
+		this.playerCar = playerCar;
 		lightController.PlayerSpotlight = playerCar.GetComponentInChildren<Light> ();
 		//playerCarPrefab.GetComponent<PlayerController> ().sceneController = gameObject.GetComponent<SceneController> ();
 		

@@ -15,10 +15,6 @@ public class PlayerController : MonoBehaviour {
 
 	private LevelSceneController levelSceneController;
 
-	//Handled via the scene probably?
-	private Text hitText;
-	private int numberOfHits = 0;
-
 	//These might best be handled completely by the buddies, no need for two of the same vars
 	private float cameraChangeTime;
 	private float laneChangeTime;
@@ -52,7 +48,6 @@ public class PlayerController : MonoBehaviour {
 		topCam = GameObject.Find ("TopCamera").GetComponent<Transform>();
 		sideCam = GameObject.Find ("SideCamera").GetComponent<Transform>();
 		frontCam = GameObject.Find ("FrontCamera").GetComponent<Transform>();
-		hitText = GameObject.Find ("HitText").GetComponent<Text>();
 		levelSceneController = GameObject.Find ("LevelSceneController").GetComponent<LevelSceneController> ();
 	}
 
@@ -233,11 +228,13 @@ public class PlayerController : MonoBehaviour {
 
 
 	void OnCollisionEnter(Collision coll) {
-		//Debug.Log ("col");
+		/*
+		 * Collision with Car
+		 */ 
 		if (coll.gameObject.tag.Equals("EnemyCar")) {
 			if (coll.gameObject.GetComponent<Rigidbody> ().isKinematic) {
-				numberOfHits += 1;
-				hitText.text = "Hits: " + numberOfHits;
+				levelSceneController.numberOfHits += 1;
+				levelSceneController.numberOfHitsText.text = "Hits: " + levelSceneController.numberOfHits;
 				if (isCarMovingRight) {
 					coll.gameObject.GetComponent<EnemyCarMover> ().markForDestroy (0); // Parameter based on direction
 				} else if (isCarMovingLeft) {
@@ -248,6 +245,22 @@ public class PlayerController : MonoBehaviour {
 
 			}
 			//Destroy (coll.gameObject);
+		}
+
+
+
+
+	}
+
+	void OnTriggerEnter(Collider coll) {
+		/*
+		 * Collision with Car
+		 */
+		//Depending on type of coin, get value
+		if (coll.gameObject.tag.Equals("Coin")) {
+			levelSceneController.numberOfCoins += 1;
+			levelSceneController.numberOfCoinsText.text = "Coins: " + levelSceneController.numberOfCoins;
+			Destroy (coll.gameObject);
 		}
 	}
 

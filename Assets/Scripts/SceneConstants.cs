@@ -34,7 +34,9 @@ namespace UnityEngine {
 		public const int NUMBER_OF_PLAYER_BUDDIES = 10;
 
 
-
+		//// Coins ////
+		public const float BASE_COIN_SPAWN_TIME = 5.0f;
+		public const float BASE_COIN_VELOCITY = 1.0f;
 
 
 
