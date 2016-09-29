@@ -70,10 +70,11 @@ public class PlayerController : MonoBehaviour {
 		currentCamTransform = topCam;
 
 		//Based on player slowdown cam change level
+		//TODO
 		//cameraChangeTime = PlayerBuddySkills.checkSkills
 		//This will likely not need to be stored at all by the player themselves
 		cameraChangeTime = 1.0f;
-		laneChangeTime = 0.5f;
+		laneChangeTime = 0.25f;
 	}
 
 	void Update () {
@@ -192,9 +193,6 @@ public class PlayerController : MonoBehaviour {
 		isCarMovingLeft = false;
 		isCarMovingRight = false;
 		inputEnabled = true;
-
-
-
 	}
 
 
@@ -244,11 +242,7 @@ public class PlayerController : MonoBehaviour {
 				}
 
 			}
-			//Destroy (coll.gameObject);
 		}
-
-
-
 
 	}
 
@@ -265,6 +259,11 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
+	/**
+	 * TODO
+	 * Perhaps this should be a class function, used on the current buddy and checked
+	 * with the Buddy Skill enum, probably makes more sense that way
+	 **/ 
 	public bool buddyCheck(PlayerBuddy buddy, BuddySkillEnum skillEnum) {
 		if (buddy.buddySkillEnum == skillEnum) {
 			return true;
@@ -272,6 +271,7 @@ public class PlayerController : MonoBehaviour {
 			return false;
 		}
 	}
+
 
 
 }

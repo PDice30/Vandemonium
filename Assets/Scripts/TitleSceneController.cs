@@ -12,38 +12,51 @@ public class TitleSceneController : MonoBehaviour {
 	public GameObject buddyThreeChosen;
 	public GameObject buddyFourChosen;
 	public GameObject buddyFiveChosen;
+	private GameObject buddyCurrentlySelected; // One of these 5 Chosen Buddies
 
 	public GameObject startButtonObject;
 
-	public Button buddyOneButton;
+	public GameObject selectBuddyPanel;
 
-	public GameObject chooseBuddyPanel;
 	public GameObject buddyScrollView;
-
 	public GameObject buddyScrollViewContent;
 
 	public Sprite[] buddyImages = new Sprite[SceneConstants.NUMBER_OF_PLAYER_BUDDIES];
 
-	public List<PlayerBuddy> allPlayerBuddies;
-	public List<PlayerBuddy> chosenPlayerBuddies;
-	public List<GameObject> listOfChosenBuddies;
+	public List<PlayerBuddy> playerBuddyCatalog = new List<PlayerBuddy> ();
+	public List<PlayerBuddy> finalChosenPlayerBuddies = new List<PlayerBuddy> ();
+	public List<GameObject> chosenBuddyButtons = new List<GameObject>();
 
 	public GameObject buddySelectButtonPrefab;
 	public GameObject playerBuddyPrefab;
 
-	public GameObject playCanvas;
-	public GameObject mainCanvas;
 
-	private Canvas currentCanvas;
+	public Camera mainCamera;
 
-	private GameObject buddyCurrentlySelected;
+	//Could all be in an array
+	public GameObject mainCanvasObj;
+	public GameObject playCanvasObj;
+	public GameObject storeCanvasObj;
+	public GameObject scoresCanvasObj;
+	public GameObject achievementsCanvasObj;
+	public GameObject statsCanvasObj;
+
+	private GameObject currentCanvasObj;
 
 	public LevelSceneController levelSceneController;
 
 	void Awake () {
+
+		/**
+		 * Set all of the canvas's camera components to the main camera
+		 * and set them all not active
+		 */
+		resetCanvasesAndCameras ();
+		currentCanvasObj = mainCanvasObj;
+
+
 		//Setup/Get PlayerPrefs
-
-
+	
 		//Will Only happen once
 		if (PlayerPrefs.GetInt ("Player_FirstTimePlaying", 1) == 1) {
 			setupInitialPlayerPrefs ();
@@ -57,7 +70,7 @@ public class TitleSceneController : MonoBehaviour {
 			playerBuddy.buddySkillEnum = (BuddySkillEnum)i;
 			newObject.name = playerBuddy.buddySkillEnum.ToString ();
 			playerBuddy.getBuddyStats ();
-			allPlayerBuddies.Add (playerBuddy);
+			playerBuddyCatalog.Add (playerBuddy);
 
 
 			//Button Setup for Buddy Select
@@ -93,20 +106,13 @@ public class TitleSceneController : MonoBehaviour {
 		}
 	}
 
-	//RENAME!
+
 	void Start () {
-		allPlayerBuddies = new List<PlayerBuddy> ();
-
-		listOfChosenBuddies.Add (buddyOneChosen);
-		listOfChosenBuddies.Add (buddyTwoChosen);
-		listOfChosenBuddies.Add (buddyThreeChosen);
-		listOfChosenBuddies.Add (buddyFourChosen);
-		listOfChosenBuddies.Add (buddyFiveChosen);
-
-		//chrono2.AddComponent<Transform> ();
-		//chrono2.transform.position = new Vector3 (0, 0, 0);
-
-		//DontDestroyOnLoad (chrono2);
+		chosenBuddyButtons.Add (buddyOneChosen);
+		chosenBuddyButtons.Add (buddyTwoChosen);
+		chosenBuddyButtons.Add (buddyThreeChosen);
+		chosenBuddyButtons.Add (buddyFourChosen);
+		chosenBuddyButtons.Add (buddyFiveChosen);
 	}
 	
 	// Update is called once per frame
@@ -115,13 +121,13 @@ public class TitleSceneController : MonoBehaviour {
 	}
 
 	public void startButtonClicked() {
-		foreach (GameObject buddyChosen in listOfChosenBuddies) {
+		foreach (GameObject buddyChosen in chosenBuddyButtons) {
 			if (buddyChosen.GetComponent<ChosenBuddy> ().buddy != null) {
-				chosenPlayerBuddies.Add (buddyChosen.GetComponent<ChosenBuddy> ().buddy);
+				finalChosenPlayerBuddies.Add (buddyChosen.GetComponent<ChosenBuddy> ().buddy);
 			}
 		}	
 
-		foreach (PlayerBuddy buddy in chosenPlayerBuddies) {
+		foreach (PlayerBuddy buddy in finalChosenPlayerBuddies) {
 			DontDestroyOnLoad (buddy);
 		}
 
@@ -132,35 +138,30 @@ public class TitleSceneController : MonoBehaviour {
 
 	//Instead, pass an int as well to represent the image index
 	public void buddyScrollButtonClicked(PlayerBuddy buddy) {
-
 		Debug.Log ("added player buddy object:" + buddy.name);
-
-		//buddyCurrentlySelected.GetComponent<Button>().image.sprite = buddy.GetComponent<Button>().image.sprite;
 		buddyCurrentlySelected.GetComponent<ChosenBuddy> ().buddy = buddy;
-		Debug.Log (buddy.buddyId);
 		buddyCurrentlySelected.GetComponent<Button> ().image.sprite = buddyImages [buddy.buddyId];
-		chooseBuddyPanel.SetActive (false);
+		//Cycles through the chosen buddies and sees if the selected buddy is a duplicate and removes it from the chosen list.
+		foreach (GameObject chosenBuddyButton in chosenBuddyButtons) {
+			if ((chosenBuddyButton != buddyCurrentlySelected) &&
+			    (chosenBuddyButton.GetComponent<ChosenBuddy> ().buddy == buddyCurrentlySelected.GetComponent<ChosenBuddy> ().buddy)) {
+				chosenBuddyButton.GetComponent<ChosenBuddy> ().buddy = null;
+				chosenBuddyButton.GetComponent<Button> ().image.sprite = null;
+			}
+		}
+
+
+
+		selectBuddyPanel.SetActive (false);
 		buddyScrollView.SetActive (false);
 		startButtonObject.SetActive (true);
 
 	}
-	/*
-	public void buddyScrollButtonClicked(PlayerBuddy buddy) {
 
-		Debug.Log ("added player buddy object:" + buddy.name);
 
-		//buddyCurrentlySelected.GetComponent<Button>().image.sprite = buddy.GetComponent<Button>().image.sprite;
-		buddyCurrentlySelected.GetComponent<ChosenBuddy> ().buddy = buddy;
-		//buddyCurrentlySelected
-		chooseBuddyPanel.SetActive (false);
-		buddyScrollView.SetActive (false);
-		startButtonObject.SetActive (true);
-
-	}*/
-
-	public void buddySelectedButtonClicked(Button buddyButton) {
+	public void buddyChosenButtonClicked(Button buddyButton) {
 		buddyCurrentlySelected = buddyButton.gameObject;
-		chooseBuddyPanel.SetActive (true);
+		selectBuddyPanel.SetActive (true);
 		buddyScrollView.SetActive (true);
 		startButtonObject.SetActive (false);
 
@@ -168,8 +169,30 @@ public class TitleSceneController : MonoBehaviour {
 
 	public void menuButtonClicked(Button menuButton) {
 		if (menuButton.name == "ButtonToPlay") {
-			mainCanvas.SetActive (false);
-			playCanvas.SetActive (true);
+			currentCanvasObj.SetActive (false);
+			playCanvasObj.SetActive (true);
+			currentCanvasObj = playCanvasObj;
+		} else if (menuButton.name == "ButtonToStore") {
+			currentCanvasObj.SetActive (false);
+			storeCanvasObj.SetActive (true);
+			currentCanvasObj = storeCanvasObj;
+		} else if (menuButton.name == "ButtonToScores") {
+			currentCanvasObj.SetActive (false);
+			scoresCanvasObj.SetActive (true);
+			currentCanvasObj = scoresCanvasObj;
+		} else if (menuButton.name == "ButtonToAchievements") {
+			currentCanvasObj.SetActive (false);
+			achievementsCanvasObj.SetActive (true);
+			currentCanvasObj = achievementsCanvasObj;
+		} else if (menuButton.name == "ButtonToStats") {
+			currentCanvasObj.SetActive (false);
+			statsCanvasObj.SetActive (true);
+			currentCanvasObj = statsCanvasObj;
+		} else if (menuButton.name == "ButtonBackToMain") {
+			currentCanvasObj.SetActive (false);
+			mainCanvasObj.SetActive (true);
+			currentCanvasObj = mainCanvasObj;
+			//currentCanvas
 		}
 	}
 
@@ -215,13 +238,19 @@ public class TitleSceneController : MonoBehaviour {
 	void getPlayerPrefs() {
 		
 	}
-
-
-	void setChronoStats() {
-		PlayerPrefs.SetInt ("Buddy_ChronologistLevel", 1);
-		PlayerPrefs.SetFloat ("Buddy_CameraSlowdownPercentage", 0.5f);
-	}
 		
+	private void resetCanvasesAndCameras() {
+		playCanvasObj.GetComponent<Canvas> ().worldCamera = mainCamera;
+		playCanvasObj.SetActive (false);
+		storeCanvasObj.GetComponent<Canvas> ().worldCamera = mainCamera;
+		storeCanvasObj.SetActive (false);
+		scoresCanvasObj.GetComponent<Canvas> ().worldCamera = mainCamera;
+		scoresCanvasObj.SetActive (false);
+		achievementsCanvasObj.GetComponent<Canvas> ().worldCamera = mainCamera;
+		achievementsCanvasObj.SetActive (false);
+		statsCanvasObj.GetComponent<Canvas> ().worldCamera = mainCamera;
+		statsCanvasObj.SetActive (false);
+	}
 
 
 }

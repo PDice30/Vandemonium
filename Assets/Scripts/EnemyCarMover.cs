@@ -76,14 +76,14 @@ public class EnemyCarMover : MonoBehaviour {
 	private IEnumerator moveAndDestroy(int direction) {
 		float xForce, yForce, zForce;
 		if (direction == 0) { //Right
-			xForce = Random.Range (SceneConstants.XFORCE_COLLISION_MIN, SceneConstants.XFORCE_COLLISION_MAX);
-			zForce = Random.Range (SceneConstants.ZFORCE_COLLISION_MIN, SceneConstants.ZFORCE_COLLISION_MAX);
+			xForce = Random.Range (SceneConstants.XFORCE_COLLISION_MIN, SceneConstants.XFORCE_COLLISION_MAX) * SceneConstants.FORCE_TEST_MULTIPLIER;
+			zForce = Random.Range (SceneConstants.ZFORCE_COLLISION_MIN, SceneConstants.ZFORCE_COLLISION_MAX) * SceneConstants.FORCE_TEST_MULTIPLIER;
 		} else if (direction == 1) { //Left
-			xForce = Random.Range (-SceneConstants.XFORCE_COLLISION_MAX, -SceneConstants.XFORCE_COLLISION_MIN);
-			zForce = Random.Range (SceneConstants.ZFORCE_COLLISION_MIN, SceneConstants.ZFORCE_COLLISION_MAX);
+			xForce = Random.Range (-SceneConstants.XFORCE_COLLISION_MAX, -SceneConstants.XFORCE_COLLISION_MIN) * SceneConstants.FORCE_TEST_MULTIPLIER;
+			zForce = Random.Range (SceneConstants.ZFORCE_COLLISION_MIN, SceneConstants.ZFORCE_COLLISION_MAX) * SceneConstants.FORCE_TEST_MULTIPLIER;
 		} else {
-			xForce = (Random.Range (-SceneConstants.XFORCE_COLLISION_MIN / 2, SceneConstants.XFORCE_COLLISION_MAX / 2)) * 2;
-			zForce = Random.Range (SceneConstants.ZFORCE_COLLISION_MIN, SceneConstants.ZFORCE_COLLISION_MAX);
+			xForce = (Random.Range (-SceneConstants.XFORCE_COLLISION_MIN / 2, SceneConstants.XFORCE_COLLISION_MAX / 2)) * 2 * SceneConstants.FORCE_TEST_MULTIPLIER;
+			zForce = Random.Range (SceneConstants.ZFORCE_COLLISION_MIN, SceneConstants.ZFORCE_COLLISION_MAX) * SceneConstants.FORCE_TEST_MULTIPLIER;
 		}
 			
 

@@ -7,7 +7,7 @@ namespace UnityEngine {
 
 		public const float BASE_SCENE_SPEED = 2.0f;
 
-		public const float BASIC_CAR_SPAWN_TIME = 2.0f;
+		public const float BASIC_CAR_SPAWN_TIME = 1.2f;
 		public const float BASIC_BRIDGE_SPAWN_TIME = 60.0f;
 		public const float BASIC_TERRAIN_SPAWN_TIME = 1.0f;
 
@@ -25,6 +25,8 @@ namespace UnityEngine {
 		public const float YFORCE_COLLISION_MAX = 400f;
 		public const float ZFORCE_COLLISION_MIN = 600f;
 		public const float ZFORCE_COLLISION_MAX = 1000f;
+		//Should be Set to 1f or removed for Release
+		public const float FORCE_TEST_MULTIPLIER = 3f;
 
 
 		public const float DESTROY_OBJECT_POSITION = -20f; // z position behind car
