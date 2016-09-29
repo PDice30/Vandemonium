@@ -24,9 +24,9 @@ public class LightController : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.N)) {
 			SunSource.GetComponent<Light> ().enabled = !SunSource.GetComponent<Light> ().enabled;
 			if (!SunSource.GetComponent<Light> ().enabled) {
-				RenderSettings.ambientIntensity = 0;
+				RenderSettings.ambientSkyColor = Color.black;
 			} else {
-				RenderSettings.ambientIntensity = 1;
+				RenderSettings.ambientSkyColor = Color.white;
 			}
 			NightSource.GetComponent<Light> ().enabled = !NightSource.GetComponent<Light> ().enabled;
 			PlayerSpotlight.GetComponent<Light> ().enabled = !PlayerSpotlight.GetComponent<Light> ().enabled;

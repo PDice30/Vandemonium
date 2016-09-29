@@ -5,9 +5,9 @@ namespace UnityEngine {
 		public const float PLAYER_VELOCITY = 1.0f;
 		public const float PLAYER_VELOCITY_MULTIPLYER = 1.0f;
 
-		public const float BASE_SCENE_SPEED = 1.0f;
+		public const float BASE_SCENE_SPEED = 2.0f;
 
-		public const float BASIC_CAR_SPAWN_TIME = 1.0f;
+		public const float BASIC_CAR_SPAWN_TIME = 2.0f;
 		public const float BASIC_BRIDGE_SPAWN_TIME = 60.0f;
 		public const float BASIC_TERRAIN_SPAWN_TIME = 1.0f;
 

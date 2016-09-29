@@ -260,7 +260,8 @@ public class PlayerController : MonoBehaviour {
 		if (coll.gameObject.tag.Equals("Coin")) {
 			levelSceneController.numberOfCoins += 1;
 			levelSceneController.numberOfCoinsText.text = "Coins: " + levelSceneController.numberOfCoins;
-			Destroy (coll.gameObject);
+			coll.gameObject.GetComponent<CoinMover> ().hasBeenCollected = true;
+			//Destroy (coll.gameObject);
 		}
 	}
 
