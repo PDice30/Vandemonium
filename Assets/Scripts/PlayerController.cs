@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
+
 
 public class PlayerController : MonoBehaviour {
 
@@ -11,6 +13,9 @@ public class PlayerController : MonoBehaviour {
 	public List<PlayerBuddy> playerBuddies;
 	//public PlayerBuddy[] playerBuddies;
 	public GameObject playerBuddyPrefab;
+
+	public int playerHealth;
+	public int playerArmor;
 
 
 	private LevelSceneController levelSceneController;
@@ -52,6 +57,11 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void Start () {
+
+		//Based on buddies and level etc
+		//Temp
+		playerHealth = SceneConstants.DEFAULT_PLAYER_HEALTH;
+		playerArmor = 0;
 
 		playerBuddies = levelSceneController.playerBuddies;
 
@@ -97,13 +107,34 @@ public class PlayerController : MonoBehaviour {
 
 
 		//Move Camera - Debug based on keys
+		//TODO Testing Xray!!
+		// Don't actually change the prefab material, instead change the material of the new object
+		// as soon as it's instantiated.
 		if (Input.GetKeyDown (KeyCode.T) && currentCamTransform != topCam && !isCameraMoving) {
+			GameObject.Find("CarSpawner").GetComponent<CarSpawner>().enemyCarPrefab.GetComponent<MeshRenderer>().material = Resources.Load ("Enemy_Car_XRay") as Material;
+			GameObject[] enemyCarArray = GameObject.FindGameObjectsWithTag ("EnemyCar");
+			for (int i = 0; i < enemyCarArray.Length; i++) {
+				enemyCarArray [i].GetComponent<MeshRenderer> ().material = Resources.Load ("Enemy_Car_XRay") as Material;
+			}
+			//Also Change the prefab
 			isCameraMoving = true;
 			StartCoroutine(changeCamera(topCam, cameraChangeTime));
 		} else if (Input.GetKeyDown (KeyCode.S) && currentCamTransform != sideCam && !isCameraMoving) {
+			GameObject.Find("CarSpawner").GetComponent<CarSpawner>().enemyCarPrefab.GetComponent<MeshRenderer>().material = Resources.Load ("Enemy_Car_XRay") as Material;
+			GameObject[] enemyCarArray = GameObject.FindGameObjectsWithTag ("EnemyCar");
+			for (int i = 0; i < enemyCarArray.Length; i++) {
+				enemyCarArray [i].GetComponent<MeshRenderer> ().material = Resources.Load ("Enemy_Car_XRay") as Material;
+			}
+			//Also Change the prefab
 			isCameraMoving = true;
 			StartCoroutine(changeCamera(sideCam, cameraChangeTime));
 		} else if (Input.GetKeyDown (KeyCode.F) && currentCamTransform != frontCam && !isCameraMoving) {
+			GameObject.Find("CarSpawner").GetComponent<CarSpawner>().enemyCarPrefab.GetComponent<MeshRenderer>().material = Resources.Load ("Enemy_Car_XRay") as Material;
+			GameObject[] enemyCarArray = GameObject.FindGameObjectsWithTag ("EnemyCar");
+			for (int i = 0; i < enemyCarArray.Length; i++) {
+				enemyCarArray [i].GetComponent<MeshRenderer> ().material = Resources.Load ("Enemy_Car_XRay") as Material;
+			}
+			//Also Change the prefab
 			isCameraMoving = true;
 			StartCoroutine(changeCamera(frontCam, cameraChangeTime));
 		}
@@ -200,8 +231,9 @@ public class PlayerController : MonoBehaviour {
 	private IEnumerator changeCamera(Transform targetCamTransform, float changeTime) {
 		
 		foreach (PlayerBuddy buddy in playerBuddies) {
+			//Null check probably not necessary
 			if (buddy != null) {
-				if (buddyCheck(buddy, BuddySkillEnum.Chronologist)) { // Returns true if buddy has that skill
+				if (buddy.buddyCheck(BuddySkillEnum.Chronologist)) { // Returns true if buddy has that skill
 					Time.timeScale = (Time.timeScale * buddy.chronologist_cameraSlowdownPercentage);
 				}
 			}
@@ -231,6 +263,12 @@ public class PlayerController : MonoBehaviour {
 		 */ 
 		if (coll.gameObject.tag.Equals("EnemyCar")) {
 			if (coll.gameObject.GetComponent<Rigidbody> ().isKinematic) {
+				playerHealth -= 1;
+				//Check for death
+				if (playerHealth <= 0) {
+					levelSceneController.beginGameOver ();
+				}	
+
 				levelSceneController.numberOfHits += 1;
 				levelSceneController.numberOfHitsText.text = "Hits: " + levelSceneController.numberOfHits;
 				if (isCarMovingRight) {
@@ -251,27 +289,17 @@ public class PlayerController : MonoBehaviour {
 		 * Collision with Car
 		 */
 		//Depending on type of coin, get value
+		//Find an easier way to get component for these checks
 		if (coll.gameObject.tag.Equals("Coin")) {
-			levelSceneController.numberOfCoins += 1;
-			levelSceneController.numberOfCoinsText.text = "Coins: " + levelSceneController.numberOfCoins;
-			coll.gameObject.GetComponent<CoinMover> ().hasBeenCollected = true;
+			if (coll.gameObject.GetComponent<CoinMover> ().hasBeenCollected == false) {
+				levelSceneController.numberOfCoins += 1;
+				levelSceneController.numberOfCoinsText.text = "Coins: " + levelSceneController.numberOfCoins;
+				coll.gameObject.GetComponent<CoinMover> ().hasBeenCollected = true;
+			}
+
 			//Destroy (coll.gameObject);
 		}
 	}
-
-	/**
-	 * TODO
-	 * Perhaps this should be a class function, used on the current buddy and checked
-	 * with the Buddy Skill enum, probably makes more sense that way
-	 **/ 
-	public bool buddyCheck(PlayerBuddy buddy, BuddySkillEnum skillEnum) {
-		if (buddy.buddySkillEnum == skillEnum) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-
+		
 
 }

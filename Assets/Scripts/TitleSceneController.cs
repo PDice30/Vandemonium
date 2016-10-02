@@ -58,6 +58,9 @@ public class TitleSceneController : MonoBehaviour {
 
 		//Setup/Get PlayerPrefs
 	
+		//Setup saved chosen buddies
+		//If they have chronologist as buddy 1, keep it buddy 1.
+
 		//Will Only happen once
 		if (PlayerPrefs.GetInt ("Player_FirstTimePlaying", 1) == 1) {
 			setupInitialPlayerPrefs ();
@@ -202,16 +205,16 @@ public class TitleSceneController : MonoBehaviour {
 	void setupInitialPlayerPrefs() {
 		PlayerPrefs.SetInt ("Player_FirstTimePlaying", 0);
 		//Chronologist Setup
-		PlayerPrefs.SetInt ("Player_HasUnlockedChronologist", 0);
+		PlayerPrefs.SetInt ("Player_HasUnlockedChronologist", 1);
 		PlayerPrefs.SetInt ("Buddy_Chronologist_Level", 1);
 		PlayerPrefs.SetFloat ("Buddy_Chronologist_CameraSlowdownPercentage", 0.5f);
 		PlayerPrefs.SetFloat ("Buddy_Chronologist_CameraSlowdownTime", 0f);
 		PlayerPrefs.SetFloat ("Buddy_Chronologist_CameraSlowdownTime", 0f);
 		//Rocket Setup
-		PlayerPrefs.SetInt ("Player_HasUnlockedRocker", 0);
+		PlayerPrefs.SetInt ("Player_HasUnlockedRocker", 1);
 		PlayerPrefs.SetInt ("Buddy_Rocker_Level", 1);
-		PlayerPrefs.SetInt ("Buddy_Rocker_CarsDoCollide", 1);
-		PlayerPrefs.SetFloat ("Buddy_Chronologist_CameraSlowdownTime", 0f);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Rocker_CarsDoCollide, 1);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Rocker_CarsCollisionForceMultiplier, 3f);
 		PlayerPrefs.SetFloat ("Buddy_Chronologist_CameraSlowdownTime", 0f);
 		//Radiologist Setup
 		PlayerPrefs.SetInt ("Player_HasUnlockedRadiologist", 0);
