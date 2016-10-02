@@ -33,6 +33,8 @@ public class TitleSceneController : MonoBehaviour {
 
 	public Camera mainCamera;
 
+	public GameObject playCanvasBackButton;
+
 	//Could all be in an array
 	public GameObject mainCanvasObj;
 	public GameObject playCanvasObj;
@@ -53,7 +55,6 @@ public class TitleSceneController : MonoBehaviour {
 		 */
 		resetCanvasesAndCameras ();
 		currentCanvasObj = mainCanvasObj;
-
 
 		//Setup/Get PlayerPrefs
 	
@@ -149,20 +150,21 @@ public class TitleSceneController : MonoBehaviour {
 				chosenBuddyButton.GetComponent<Button> ().image.sprite = null;
 			}
 		}
-
-
-
+			
 		selectBuddyPanel.SetActive (false);
 		buddyScrollView.SetActive (false);
 		startButtonObject.SetActive (true);
+		playCanvasBackButton.SetActive (true);
 
 	}
 
 
 	public void buddyChosenButtonClicked(Button buddyButton) {
 		buddyCurrentlySelected = buddyButton.gameObject;
+
 		selectBuddyPanel.SetActive (true);
 		buddyScrollView.SetActive (true);
+		playCanvasBackButton.SetActive (false);
 		startButtonObject.SetActive (false);
 
 	}
@@ -251,6 +253,5 @@ public class TitleSceneController : MonoBehaviour {
 		statsCanvasObj.GetComponent<Canvas> ().worldCamera = mainCamera;
 		statsCanvasObj.SetActive (false);
 	}
-
 
 }
