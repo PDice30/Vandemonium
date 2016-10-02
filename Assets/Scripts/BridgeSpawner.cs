@@ -3,7 +3,7 @@ using System.Collections;
 
 public class BridgeSpawner : MonoBehaviour {
 
-	public SceneController sceneController;
+	public LevelSceneController levelSceneController;
 
 	private float spawnInterval;
 	private float timeUntilNextSpawn;
@@ -15,13 +15,13 @@ public class BridgeSpawner : MonoBehaviour {
 	public GameObject bridgePrefab;
 
 	void Awake() {
-		sceneController = GameObject.Find ("SceneController").GetComponent<SceneController>();
+		levelSceneController = GameObject.Find ("LevelSceneController").GetComponent<LevelSceneController>();
 	}
 
 	void Start () {
 		spawnInterval = SceneConstants.BASIC_BRIDGE_SPAWN_TIME;
 		timeUntilNextSpawn = SceneConstants.BASIC_BRIDGE_SPAWN_TIME / 2;
-		bridgePrefab.GetComponent<MiscObjectMover> ().sceneController = sceneController;
+		bridgePrefab.GetComponent<MiscObjectMover> ().levelSceneController = levelSceneController;
 	}
 
 	void Update () {
@@ -31,7 +31,7 @@ public class BridgeSpawner : MonoBehaviour {
 			timeUntilNextSpawn = spawnInterval;
 		}
 
-		timeUntilNextSpawn -= (Time.deltaTime * sceneController.SCENE_SPEED);
+		timeUntilNextSpawn -= (Time.deltaTime * levelSceneController.SCENE_SPEED);
 	}
 
 	//A new bridge object gets a MiscObjectMover component attached to it to move it through the scene

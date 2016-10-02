@@ -5,9 +5,9 @@ namespace UnityEngine {
 		public const float PLAYER_VELOCITY = 1.0f;
 		public const float PLAYER_VELOCITY_MULTIPLYER = 1.0f;
 
-		public const float BASE_SCENE_SPEED = 3.0f;
+		public const float BASE_SCENE_SPEED = 2.0f;
 
-		public const float BASIC_CAR_SPAWN_TIME = 1.0f;
+		public const float BASIC_CAR_SPAWN_TIME = 1.2f;
 		public const float BASIC_BRIDGE_SPAWN_TIME = 60.0f;
 		public const float BASIC_TERRAIN_SPAWN_TIME = 1.0f;
 
@@ -25,11 +25,24 @@ namespace UnityEngine {
 		public const float YFORCE_COLLISION_MAX = 400f;
 		public const float ZFORCE_COLLISION_MIN = 600f;
 		public const float ZFORCE_COLLISION_MAX = 1000f;
+		//Should be Set to 1f or removed for Release
+		public const float FORCE_TEST_MULTIPLIER = 3f;
 
 
 		public const float DESTROY_OBJECT_POSITION = -20f; // z position behind car
 
 		public const int TIME_UNTIL_DESTROY_CAR = 90;
+
+		public const int NUMBER_OF_PLAYER_BUDDIES = 10;
+
+
+		//// Coins ////
+		public const float BASE_COIN_SPAWN_TIME = 5.0f;
+		public const float BASE_COIN_VELOCITY = 1.0f;
+
+
+
+
 	}
 }
 		

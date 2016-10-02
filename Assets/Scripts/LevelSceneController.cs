@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 //TODO are two scene controllers even necessary?
-public class SceneController : MonoBehaviour {
+public class LevelSceneController : MonoBehaviour {
 
 	public LightController lightController;
 
@@ -14,17 +14,19 @@ public class SceneController : MonoBehaviour {
 	public List<PlayerBuddy> playerBuddies;
 
 	public GameObject playerCarPrefab;
-	public GameObject playerBuddyPrefab;
+
+	//These are updated via the PlayerController Collisions etc.
+	public Text numberOfCoinsText;
+	public Text numberOfHitsText;
+	public float numberOfCoins = 0;
+	public float numberOfHits = 0;
 
 	public float SCENE_SPEED;
 
 	void Awake() { 
 		//Application.targetFrameRate = 30;
-		//RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Skybox;
-		//RenderSettings.ambientIntensity = 1;
 		titleSceneController = GameObject.Find("TitleSceneController").GetComponent<TitleSceneController>();
-		getBuddies (titleSceneController.playerBuddies);
-		//addPlayerBuddy (BuddySkillEnum.Chronologist);
+		getBuddies (titleSceneController.finalChosenPlayerBuddies);
 		SCENE_SPEED = SceneConstants.BASE_SCENE_SPEED;
 
 	}
@@ -39,22 +41,8 @@ public class SceneController : MonoBehaviour {
 		
 	}
 
-	public void transitionToLevel() {
-		
-	}
-
-
 	public void getBuddies(List<PlayerBuddy> buddies) {
 		playerBuddies = buddies;
-	}
-
-	public void addPlayerBuddy(BuddySkillEnum skillEnum) {
-		GameObject tempBuddy = Instantiate (playerBuddyPrefab, new Vector3 (0, 20, 0), Quaternion.identity) as GameObject;
-		PlayerBuddy newBuddy = tempBuddy.GetComponent<PlayerBuddy> ();
-		newBuddy.buddySkillEnum = skillEnum;
-		//Temp
-		newBuddy.chronologist_cameraSlowdownPercentage = .5f;
-		playerBuddies.Add (newBuddy);
 	}
 }
 

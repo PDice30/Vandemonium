@@ -3,7 +3,7 @@ using System.Collections;
 
 public class CarSpawner : MonoBehaviour {
 
-	public SceneController sceneController;
+	public LevelSceneController levelSceneController;
 
 	private float spawnInterval;
 	private float timeUntilNextSpawn;
@@ -17,13 +17,13 @@ public class CarSpawner : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake() {
-		sceneController = GameObject.Find ("SceneController").GetComponent<SceneController>();
+		levelSceneController = GameObject.Find ("LevelSceneController").GetComponent<LevelSceneController>();
 	}
 
 	void Start () {
 		spawnInterval = SceneConstants.BASIC_CAR_SPAWN_TIME;
 		timeUntilNextSpawn = SceneConstants.BASIC_CAR_SPAWN_TIME;
-		enemyCarPrefab.GetComponent<EnemyCarMover> ().sceneController = sceneController;
+		enemyCarPrefab.GetComponent<EnemyCarMover> ().levelSceneController = levelSceneController;
 	}
 	
 	// Update is called once per frame
@@ -34,7 +34,7 @@ public class CarSpawner : MonoBehaviour {
 			timeUntilNextSpawn = spawnInterval;
 		}
 
-		timeUntilNextSpawn -= (Time.deltaTime * sceneController.SCENE_SPEED);
+		timeUntilNextSpawn -= (Time.deltaTime * levelSceneController.SCENE_SPEED);
 	}
 
 	//Set up the position of the new car, its speed, etc.

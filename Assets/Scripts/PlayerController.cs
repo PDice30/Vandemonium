@@ -13,11 +13,7 @@ public class PlayerController : MonoBehaviour {
 	public GameObject playerBuddyPrefab;
 
 
-	private SceneController sceneController;
-
-	//Handled via the scene probably?
-	private Text hitText;
-	private int numberOfHits = 0;
+	private LevelSceneController levelSceneController;
 
 	//These might best be handled completely by the buddies, no need for two of the same vars
 	private float cameraChangeTime;
@@ -52,17 +48,16 @@ public class PlayerController : MonoBehaviour {
 		topCam = GameObject.Find ("TopCamera").GetComponent<Transform>();
 		sideCam = GameObject.Find ("SideCamera").GetComponent<Transform>();
 		frontCam = GameObject.Find ("FrontCamera").GetComponent<Transform>();
-		hitText = GameObject.Find ("HitText").GetComponent<Text>();
-		sceneController = GameObject.Find ("SceneController").GetComponent<SceneController> ();
+		levelSceneController = GameObject.Find ("LevelSceneController").GetComponent<LevelSceneController> ();
 	}
 
 	void Start () {
 
+		playerBuddies = levelSceneController.playerBuddies;
 
-		//
-		//playerBuddies = new List<PlayerBuddy> ();
-		//Temp
-		playerBuddies = sceneController.playerBuddies;
+		foreach (PlayerBuddy buddy in playerBuddies) {
+			Debug.Log ("Buddy: " + buddy.buddySkillEnum.ToString ());
+		}
 		//All buddy code will be handled in the title scene, although
 		// it is possible some buddy addying code will be used during the game.
 
@@ -75,10 +70,11 @@ public class PlayerController : MonoBehaviour {
 		currentCamTransform = topCam;
 
 		//Based on player slowdown cam change level
+		//TODO
 		//cameraChangeTime = PlayerBuddySkills.checkSkills
 		//This will likely not need to be stored at all by the player themselves
 		cameraChangeTime = 1.0f;
-		laneChangeTime = 0.5f;
+		laneChangeTime = 0.25f;
 	}
 
 	void Update () {
@@ -94,9 +90,9 @@ public class PlayerController : MonoBehaviour {
 
 		// Speed up or down the scene
 		if (Input.GetKeyDown (KeyCode.U)) {
-			sceneController.SCENE_SPEED -= 0.25f;
+			levelSceneController.SCENE_SPEED -= 0.25f;
 		} else if (Input.GetKeyDown (KeyCode.I)) {
-			sceneController.SCENE_SPEED += 0.25f;
+			levelSceneController.SCENE_SPEED += 0.25f;
 		} 
 
 
@@ -197,9 +193,6 @@ public class PlayerController : MonoBehaviour {
 		isCarMovingLeft = false;
 		isCarMovingRight = false;
 		inputEnabled = true;
-
-
-
 	}
 
 
@@ -233,11 +226,13 @@ public class PlayerController : MonoBehaviour {
 
 
 	void OnCollisionEnter(Collision coll) {
-		//Debug.Log ("col");
+		/*
+		 * Collision with Car
+		 */ 
 		if (coll.gameObject.tag.Equals("EnemyCar")) {
 			if (coll.gameObject.GetComponent<Rigidbody> ().isKinematic) {
-				numberOfHits += 1;
-				hitText.text = "Hits: " + numberOfHits;
+				levelSceneController.numberOfHits += 1;
+				levelSceneController.numberOfHitsText.text = "Hits: " + levelSceneController.numberOfHits;
 				if (isCarMovingRight) {
 					coll.gameObject.GetComponent<EnemyCarMover> ().markForDestroy (0); // Parameter based on direction
 				} else if (isCarMovingLeft) {
@@ -247,10 +242,28 @@ public class PlayerController : MonoBehaviour {
 				}
 
 			}
+		}
+
+	}
+
+	void OnTriggerEnter(Collider coll) {
+		/*
+		 * Collision with Car
+		 */
+		//Depending on type of coin, get value
+		if (coll.gameObject.tag.Equals("Coin")) {
+			levelSceneController.numberOfCoins += 1;
+			levelSceneController.numberOfCoinsText.text = "Coins: " + levelSceneController.numberOfCoins;
+			coll.gameObject.GetComponent<CoinMover> ().hasBeenCollected = true;
 			//Destroy (coll.gameObject);
 		}
 	}
 
+	/**
+	 * TODO
+	 * Perhaps this should be a class function, used on the current buddy and checked
+	 * with the Buddy Skill enum, probably makes more sense that way
+	 **/ 
 	public bool buddyCheck(PlayerBuddy buddy, BuddySkillEnum skillEnum) {
 		if (buddy.buddySkillEnum == skillEnum) {
 			return true;
@@ -258,6 +271,7 @@ public class PlayerController : MonoBehaviour {
 			return false;
 		}
 	}
+
 
 
 }

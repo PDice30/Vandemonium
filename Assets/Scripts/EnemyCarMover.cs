@@ -8,14 +8,16 @@ public class EnemyCarMover : MonoBehaviour {
 	private float carVelocity;
 	private float sceneVelocity;
 	//public GameObject sceneControllerObj;
-	public SceneController sceneController;
+	public LevelSceneController levelSceneController;
 
 	//private bool isMarkedForDestroy = false; // Currently not in use
 
 	private Rigidbody carRigidbody;
 
+	//Make sure this is all hooked up properly with the finding of the levelSceneController
+	//Why is this not hooked up in the editor?
 	void Awake() {
-		sceneController = GameObject.Find ("SceneController").GetComponent<SceneController>();
+		levelSceneController = GameObject.Find ("LevelSceneController").GetComponent<LevelSceneController>();
 		carRigidbody = gameObject.GetComponent<Rigidbody> ();
 	}
 
@@ -28,7 +30,7 @@ public class EnemyCarMover : MonoBehaviour {
 	void Update () {
 		//Possibly will remove its translate update when getting destroyed
 		//if (!isMarkedForDestroy) {
-			transform.Translate (0, 0, -(Time.deltaTime * carVelocity * sceneController.SCENE_SPEED), Space.World);
+			transform.Translate (0, 0, -(Time.deltaTime * carVelocity * levelSceneController.SCENE_SPEED), Space.World);
 			if (transform.position.z < SceneConstants.DESTROY_OBJECT_POSITION) {
 				Destroy (gameObject);
 			}
@@ -74,14 +76,14 @@ public class EnemyCarMover : MonoBehaviour {
 	private IEnumerator moveAndDestroy(int direction) {
 		float xForce, yForce, zForce;
 		if (direction == 0) { //Right
-			xForce = Random.Range (SceneConstants.XFORCE_COLLISION_MIN, SceneConstants.XFORCE_COLLISION_MAX);
-			zForce = Random.Range (SceneConstants.ZFORCE_COLLISION_MIN, SceneConstants.ZFORCE_COLLISION_MAX);
+			xForce = Random.Range (SceneConstants.XFORCE_COLLISION_MIN, SceneConstants.XFORCE_COLLISION_MAX) * SceneConstants.FORCE_TEST_MULTIPLIER;
+			zForce = Random.Range (SceneConstants.ZFORCE_COLLISION_MIN, SceneConstants.ZFORCE_COLLISION_MAX) * SceneConstants.FORCE_TEST_MULTIPLIER;
 		} else if (direction == 1) { //Left
-			xForce = Random.Range (-SceneConstants.XFORCE_COLLISION_MAX, -SceneConstants.XFORCE_COLLISION_MIN);
-			zForce = Random.Range (SceneConstants.ZFORCE_COLLISION_MIN, SceneConstants.ZFORCE_COLLISION_MAX);
+			xForce = Random.Range (-SceneConstants.XFORCE_COLLISION_MAX, -SceneConstants.XFORCE_COLLISION_MIN) * SceneConstants.FORCE_TEST_MULTIPLIER;
+			zForce = Random.Range (SceneConstants.ZFORCE_COLLISION_MIN, SceneConstants.ZFORCE_COLLISION_MAX) * SceneConstants.FORCE_TEST_MULTIPLIER;
 		} else {
-			xForce = (Random.Range (-SceneConstants.XFORCE_COLLISION_MIN / 2, SceneConstants.XFORCE_COLLISION_MAX / 2)) * 2;
-			zForce = Random.Range (SceneConstants.ZFORCE_COLLISION_MIN, SceneConstants.ZFORCE_COLLISION_MAX);
+			xForce = (Random.Range (-SceneConstants.XFORCE_COLLISION_MIN / 2, SceneConstants.XFORCE_COLLISION_MAX / 2)) * 2 * SceneConstants.FORCE_TEST_MULTIPLIER;
+			zForce = Random.Range (SceneConstants.ZFORCE_COLLISION_MIN, SceneConstants.ZFORCE_COLLISION_MAX) * SceneConstants.FORCE_TEST_MULTIPLIER;
 		}
 			
 
