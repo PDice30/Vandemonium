@@ -27,7 +27,13 @@ namespace UnityEngine {
 		public const string Buddy_Chronologist_CameraSlowdownTime = "Buddy_Chronologist_CameraSlowdownTime";
 		public const string Buddy_Chronologist_RelativePlayerSpeed = "Buddy_Chronologist_RelativePlayerSpeed";
 
-
+		//Rocker
+		public const string buddy_rocker_name = "Oswald Oswaldian";
+		public const string buddy_rocker_title = "The Rocker";
+		public const string Buddy_Rocker_Level = "Buddy_Rocker_Level";
+		public const string Buddy_Rocker_CarsDoCollide = "Buddy_Rocker_CarsDoCollide";
+		public const string Buddy_Rocker_CarsCollisionForceMultiplier = "Buddy_Rocker_CarsCollisionForceMultiplier";
+		public const string Buddy_Rocker_HasShieldUpgrade = "Buddy_Rocker_HasShieldUpgrade";
 	}
 }
 

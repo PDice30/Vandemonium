@@ -20,7 +20,7 @@ public class PlayerBuddy : MonoBehaviour {
 	public float chronologist_relativePlayerSpeed = 0; // Or just a bool for normal speed?
 	// The Rocker
 	public bool rocker_carsDoCollide = false;
-	public float rocker_carsCollisionForce = 0;
+	public float rocker_carsCollisionForceMultiplier = 0;
 	public bool rocker_hasShieldUpgrade = false;
 	// The Radiologist
 	public float radiologist_xrayTime = 0;
@@ -74,28 +74,42 @@ public class PlayerBuddy : MonoBehaviour {
 			isUnlocked = PlayerPrefs.GetInt (PlayerConstants.Player_HasUnlockedChronologist);
 			buddyLevel = PlayerPrefs.GetInt (PlayerConstants.Buddy_Chronologist_Level);
 			chronologist_cameraSlowdownPercentage = PlayerPrefs.GetFloat (PlayerConstants.Buddy_Chronologist_CameraSlowdownPercentage);
-			chronologist_cameraSlowdownTime = PlayerPrefs.GetFloat ("Buddy_Chronologist_CameraSlowdownTime");
-			chronologist_relativePlayerSpeed = PlayerPrefs.GetFloat ("Buddy_Chronologist_RelativePlayerSpeed");
+			chronologist_cameraSlowdownTime = PlayerPrefs.GetFloat (PlayerConstants.Buddy_Chronologist_CameraSlowdownTime);
+			chronologist_relativePlayerSpeed = PlayerPrefs.GetFloat (PlayerConstants.Buddy_Chronologist_RelativePlayerSpeed);
 			break;
 		case BuddySkillEnum.Rocker:
 			buddyId = 1;
-			buddyName = "Oswald Oswaldian";
-			buddyTitle = "The Rocker";
+			buddyName = PlayerConstants.buddy_rocker_name;
+			buddyTitle = PlayerConstants.buddy_rocker_title;
 			isUnlocked = PlayerPrefs.GetInt (PlayerConstants.Player_HasUnlockedRocker);
-			buddyLevel = PlayerPrefs.GetInt ("Buddy_Rocker_Level");
-			int temp_rocker_carsDoCollide = PlayerPrefs.GetInt ("Buddy_Rocker_CarsDoCollide");
+			buddyLevel = PlayerPrefs.GetInt (PlayerConstants.Buddy_Rocker_Level);
+			int temp_rocker_carsDoCollide = PlayerPrefs.GetInt (PlayerConstants.Buddy_Rocker_CarsDoCollide);
 			if (temp_rocker_carsDoCollide == 1) {
 				rocker_carsDoCollide = true;
 			}
-
-			chronologist_cameraSlowdownTime = PlayerPrefs.GetFloat ("Buddy_Chronologist_CameraSlowdownTime");
-			chronologist_relativePlayerSpeed = PlayerPrefs.GetFloat ("Buddy_Chronologist_RelativePlayerSpeed");
+			rocker_carsCollisionForceMultiplier = PlayerPrefs.GetFloat (PlayerConstants.Buddy_Rocker_CarsCollisionForceMultiplier);
+			int temp_rocker_hasShieldUpgrade = PlayerPrefs.GetInt (PlayerConstants.Buddy_Rocker_HasShieldUpgrade);
+			if (temp_rocker_hasShieldUpgrade == 1) {
+				rocker_hasShieldUpgrade = true;
+			}
 			break;
 		default:
 			return;
 		}
 
 
+	}
+
+
+	/**
+	 * Checks if this buddy matches the enum being searched
+	 */
+	public bool buddyCheck(BuddySkillEnum skillEnum) {
+		if (buddySkillEnum == skillEnum) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 

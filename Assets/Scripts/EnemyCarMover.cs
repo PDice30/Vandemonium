@@ -55,16 +55,27 @@ public class EnemyCarMover : MonoBehaviour {
 			/**********
 			*BuddyCheck here for if car's should collide with each other
 			/*********/
-			Rigidbody collRigidbody = coll.gameObject.GetComponent<Rigidbody> ();
-			if (carRigidbody.isKinematic && collRigidbody.isKinematic) {
-				//Do Nothing
-			} else if (!carRigidbody.isKinematic && collRigidbody.isKinematic) { // Coll
-				coll.gameObject.GetComponent<EnemyCarMover> ().markForDestroy (Random.Range (0, 2));
-			} else if (carRigidbody.isKinematic && !collRigidbody.isKinematic) { // this
-				markForDestroy(Random.Range(0, 2));
-			} else { //Both are marked for destroy
-			
+			bool playerHasRockerBuddy = false;
+			foreach (PlayerBuddy buddy in levelSceneController.playerBuddies) {
+				if (buddy.buddyCheck (BuddySkillEnum.Rocker)) {
+					playerHasRockerBuddy = true;
+
+				}
 			}
+
+			if (playerHasRockerBuddy) {
+				Rigidbody collRigidbody = coll.gameObject.GetComponent<Rigidbody> ();
+				if (carRigidbody.isKinematic && collRigidbody.isKinematic) {
+					//Do Nothing
+				} else if (!carRigidbody.isKinematic && collRigidbody.isKinematic) { // Coll
+					coll.gameObject.GetComponent<EnemyCarMover> ().markForDestroy (Random.Range (0, 2));
+				} else if (carRigidbody.isKinematic && !collRigidbody.isKinematic) { // this
+					markForDestroy(Random.Range(0, 2));
+				} else { //Both are marked for destroy
+
+				}
+			}
+
 		}
 	}
 
@@ -74,16 +85,24 @@ public class EnemyCarMover : MonoBehaviour {
 	 * Destroy the actual object after TIME_UNTIL_DESTROY_CAR finishes
 	 */
 	private IEnumerator moveAndDestroy(int direction) {
+		float rocker_carsCollisionForceMultiplier = 1f;
 		float xForce, yForce, zForce;
+		//Find the rocker and modify the force
+		foreach (PlayerBuddy buddy in levelSceneController.playerBuddies) {
+			if (buddy.buddyCheck (BuddySkillEnum.Rocker)) {
+				rocker_carsCollisionForceMultiplier = buddy.rocker_carsCollisionForceMultiplier;
+			}
+		}
+
 		if (direction == 0) { //Right
-			xForce = Random.Range (SceneConstants.XFORCE_COLLISION_MIN, SceneConstants.XFORCE_COLLISION_MAX) * SceneConstants.FORCE_TEST_MULTIPLIER;
-			zForce = Random.Range (SceneConstants.ZFORCE_COLLISION_MIN, SceneConstants.ZFORCE_COLLISION_MAX) * SceneConstants.FORCE_TEST_MULTIPLIER;
+			xForce = Random.Range (SceneConstants.XFORCE_COLLISION_MIN, SceneConstants.XFORCE_COLLISION_MAX) * rocker_carsCollisionForceMultiplier * SceneConstants.FORCE_TEST_MULTIPLIER;
+			zForce = Random.Range (SceneConstants.ZFORCE_COLLISION_MIN, SceneConstants.ZFORCE_COLLISION_MAX) * rocker_carsCollisionForceMultiplier * SceneConstants.FORCE_TEST_MULTIPLIER;
 		} else if (direction == 1) { //Left
-			xForce = Random.Range (-SceneConstants.XFORCE_COLLISION_MAX, -SceneConstants.XFORCE_COLLISION_MIN) * SceneConstants.FORCE_TEST_MULTIPLIER;
-			zForce = Random.Range (SceneConstants.ZFORCE_COLLISION_MIN, SceneConstants.ZFORCE_COLLISION_MAX) * SceneConstants.FORCE_TEST_MULTIPLIER;
+			xForce = Random.Range (-SceneConstants.XFORCE_COLLISION_MAX, -SceneConstants.XFORCE_COLLISION_MIN) * rocker_carsCollisionForceMultiplier * SceneConstants.FORCE_TEST_MULTIPLIER;
+			zForce = Random.Range (SceneConstants.ZFORCE_COLLISION_MIN, SceneConstants.ZFORCE_COLLISION_MAX) * rocker_carsCollisionForceMultiplier * SceneConstants.FORCE_TEST_MULTIPLIER;
 		} else {
-			xForce = (Random.Range (-SceneConstants.XFORCE_COLLISION_MIN / 2, SceneConstants.XFORCE_COLLISION_MAX / 2)) * 2 * SceneConstants.FORCE_TEST_MULTIPLIER;
-			zForce = Random.Range (SceneConstants.ZFORCE_COLLISION_MIN, SceneConstants.ZFORCE_COLLISION_MAX) * SceneConstants.FORCE_TEST_MULTIPLIER;
+			xForce = (Random.Range (-SceneConstants.XFORCE_COLLISION_MIN / 2, SceneConstants.XFORCE_COLLISION_MAX / 2)) * 2 * rocker_carsCollisionForceMultiplier * SceneConstants.FORCE_TEST_MULTIPLIER;
+			zForce = Random.Range (SceneConstants.ZFORCE_COLLISION_MIN, SceneConstants.ZFORCE_COLLISION_MAX) * rocker_carsCollisionForceMultiplier * SceneConstants.FORCE_TEST_MULTIPLIER;
 		}
 			
 
@@ -94,7 +113,13 @@ public class EnemyCarMover : MonoBehaviour {
 		//Time until destruction, change this
 		//Copy implementation from changeCamera in PlayerController
 		//Otherwise it varies on framerate
-		for (int i = 0; i < SceneConstants.TIME_UNTIL_DESTROY_CAR; i++) {
+//		for (int i = 0; i < SceneConstants.TIME_UNTIL_DESTROY_CAR; i++) {
+//			yield return null;
+//		}
+			
+		float timeLeft = 0;
+		while (timeLeft < SceneConstants.TIME_UNTIL_DESTROY_CAR) {
+			timeLeft += Time.deltaTime;
 			yield return null;
 		}
 

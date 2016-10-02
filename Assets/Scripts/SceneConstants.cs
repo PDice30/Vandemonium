@@ -26,7 +26,7 @@ namespace UnityEngine {
 		public const float ZFORCE_COLLISION_MIN = 600f;
 		public const float ZFORCE_COLLISION_MAX = 1000f;
 		//Should be Set to 1f or removed for Release
-		public const float FORCE_TEST_MULTIPLIER = 3f;
+		public const float FORCE_TEST_MULTIPLIER = 1f;
 
 
 		public const float DESTROY_OBJECT_POSITION = -20f; // z position behind car
@@ -39,6 +39,10 @@ namespace UnityEngine {
 		//// Coins ////
 		public const float BASE_COIN_SPAWN_TIME = 5.0f;
 		public const float BASE_COIN_VELOCITY = 1.0f;
+
+
+		//// Player Settings ////
+		public const int DEFAULT_PLAYER_HEALTH = 10;
 
 
 
