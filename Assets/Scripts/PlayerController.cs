@@ -111,7 +111,7 @@ public class PlayerController : MonoBehaviour {
 		// Don't actually change the prefab material, instead change the material of the new object
 		// as soon as it's instantiated.
 		if (Input.GetKeyDown (KeyCode.T) && currentCamTransform != topCam && !isCameraMoving) {
-			GameObject.Find("CarSpawner").GetComponent<CarSpawner>().enemyCarPrefab.GetComponent<MeshRenderer>().material = Resources.Load ("Enemy_Car_XRay") as Material;
+			//GameObject.Find("CarSpawner").GetComponent<CarSpawner>().enemyCarPrefab.GetComponent<MeshRenderer>().material = Resources.Load ("Enemy_Car_XRay") as Material;
 			GameObject[] enemyCarArray = GameObject.FindGameObjectsWithTag ("EnemyCar");
 			for (int i = 0; i < enemyCarArray.Length; i++) {
 				enemyCarArray [i].GetComponent<MeshRenderer> ().material = Resources.Load ("Enemy_Car_XRay") as Material;
@@ -120,7 +120,7 @@ public class PlayerController : MonoBehaviour {
 			isCameraMoving = true;
 			StartCoroutine(changeCamera(topCam, cameraChangeTime));
 		} else if (Input.GetKeyDown (KeyCode.S) && currentCamTransform != sideCam && !isCameraMoving) {
-			GameObject.Find("CarSpawner").GetComponent<CarSpawner>().enemyCarPrefab.GetComponent<MeshRenderer>().material = Resources.Load ("Enemy_Car_XRay") as Material;
+			//GameObject.Find("CarSpawner").GetComponent<CarSpawner>().enemyCarPrefab.GetComponent<MeshRenderer>().material = Resources.Load ("Enemy_Car_XRay") as Material;
 			GameObject[] enemyCarArray = GameObject.FindGameObjectsWithTag ("EnemyCar");
 			for (int i = 0; i < enemyCarArray.Length; i++) {
 				enemyCarArray [i].GetComponent<MeshRenderer> ().material = Resources.Load ("Enemy_Car_XRay") as Material;
@@ -129,7 +129,7 @@ public class PlayerController : MonoBehaviour {
 			isCameraMoving = true;
 			StartCoroutine(changeCamera(sideCam, cameraChangeTime));
 		} else if (Input.GetKeyDown (KeyCode.F) && currentCamTransform != frontCam && !isCameraMoving) {
-			GameObject.Find("CarSpawner").GetComponent<CarSpawner>().enemyCarPrefab.GetComponent<MeshRenderer>().material = Resources.Load ("Enemy_Car_XRay") as Material;
+			//GameObject.Find("CarSpawner").GetComponent<CarSpawner>().enemyCarPrefab.GetComponent<MeshRenderer>().material = Resources.Load ("Enemy_Car_XRay") as Material;
 			GameObject[] enemyCarArray = GameObject.FindGameObjectsWithTag ("EnemyCar");
 			for (int i = 0; i < enemyCarArray.Length; i++) {
 				enemyCarArray [i].GetComponent<MeshRenderer> ().material = Resources.Load ("Enemy_Car_XRay") as Material;
@@ -174,9 +174,17 @@ public class PlayerController : MonoBehaviour {
 				//Determine if its a temp camera change
 			} else if (currentCamTransform == topCam && vertical == 1) {
 				isCameraMoving = true;
+				GameObject[] enemyCarArray = GameObject.FindGameObjectsWithTag ("EnemyCar");
+				for (int i = 0; i < enemyCarArray.Length; i++) {
+					enemyCarArray [i].GetComponent<MeshRenderer> ().material = Resources.Load ("Enemy_Car_XRay") as Material;
+				}
 				StartCoroutine(changeCamera(frontCam, cameraChangeTime));
 			} else if (currentCamTransform == frontCam && vertical == 1) {
 				isCameraMoving = true;
+				GameObject[] enemyCarArray = GameObject.FindGameObjectsWithTag ("EnemyCar");
+				for (int i = 0; i < enemyCarArray.Length; i++) {
+					enemyCarArray [i].GetComponent<MeshRenderer> ().material = Resources.Load ("Enemy_Car_XRay") as Material;
+				}
 				StartCoroutine(changeCamera(topCam, cameraChangeTime));
 			}
 		}

@@ -62,9 +62,9 @@ public class TitleSceneController : MonoBehaviour {
 		//If they have chronologist as buddy 1, keep it buddy 1.
 
 		//Will Only happen once
-		if (PlayerPrefs.GetInt ("Player_FirstTimePlaying", 1) == 1) {
+		//if (PlayerPrefs.GetInt ("Player_FirstTimePlaying", 1) == 1) {
 			setupInitialPlayerPrefs ();
-		} 
+		//} 
 
 		float xIncrement = 0f;
 		for (int i = 0; i < SceneConstants.NUMBER_OF_PLAYER_BUDDIES; i++) {

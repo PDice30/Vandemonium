@@ -31,7 +31,7 @@ namespace UnityEngine {
 
 		public const float DESTROY_OBJECT_POSITION = -20f; // z position behind car
 
-		public const int TIME_UNTIL_DESTROY_CAR = 90;
+		public const float TIME_UNTIL_DESTROY_CAR = 2f;
 
 		public const int NUMBER_OF_PLAYER_BUDDIES = 10;
 
