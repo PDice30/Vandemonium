@@ -1,19 +1,20 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\CarSpawner.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/TitleSceneController.cs">
     <Files>
-      <File FileName="Assets\Scripts\LevelSceneController.cs" Line="18" Column="35" />
-      <File FileName="Assets\Scripts\EnemyCarMover.cs" Line="79" Column="4" />
-      <File FileName="Assets\Scripts\CoinSpawner.cs" Line="35" Column="30" />
-      <File FileName="Assets\Scripts\LightController.cs" Line="29" Column="50" />
-      <File FileName="Assets\Scripts\PlayerConstants.cs" Line="36" Column="87" />
-      <File FileName="Assets\Scripts\CarSpawner.cs" Line="16" Column="27" />
-      <File FileName="Assets\Scripts\PlayerController.cs" Line="113" Column="21" NotebookId="1" />
-      <File FileName="Assets\Scripts\BridgeSpawner.cs" Line="18" Column="78" NotebookId="1" />
-      <File FileName="Assets\Scripts\SceneConstants.cs" Line="14" Column="40" NotebookId="1" />
-      <File FileName="Assets\Scripts\TitleSceneController.cs" Line="65" Column="61" NotebookId="1" />
-      <File FileName="Assets\Scripts\CoinMover.cs" Line="32" Column="27" NotebookId="1" />
-      <File FileName="Assets\Scripts\PlayerBuddy.cs" Line="25" Column="20" NotebookId="1" />
+      <File FileName="Assets/Scripts/TitleSceneController.cs" Line="10" Column="35" />
+      <File FileName="Assets/Scripts/LevelSceneController.cs" Line="104" Column="26" />
+      <File FileName="Assets/Scripts/EnemyCarMover.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CoinSpawner.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/LightController.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/PlayerController.cs" Line="184" Column="81" NotebookId="1" />
+      <File FileName="Assets/Scripts/BridgeSpawner.cs" Line="1" Column="1" NotebookId="1" />
+      <File FileName="Assets/Scripts/TerrainSpawner.cs" Line="1" Column="1" NotebookId="1" />
+      <File FileName="Assets/Scripts/SceneConstants.cs" Line="30" Column="3" NotebookId="1" />
+      <File FileName="Assets/Scripts/MiscObjectMover.cs" Line="1" Column="1" NotebookId="1" />
+      <File FileName="Assets/Scripts/CoinMover.cs" Line="1" Column="1" NotebookId="1" />
+      <File FileName="Assets/Scripts/CarSpawner.cs" Line="1" Column="1" NotebookId="1" />
+      <File FileName="Assets/Scripts/TitleWithVanSceneController.cs" Line="1" Column="1" NotebookId="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
