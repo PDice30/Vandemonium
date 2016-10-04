@@ -15,14 +15,22 @@ public class LevelSceneController : MonoBehaviour {
 
 	public GameObject playerCarPrefab;
 
+	//Score Canvas Items
 	public GameObject scoreCanvasObj;
-	public GameObject gameOverCanvasObj;
-
-	//These are updated via the PlayerController Collisions etc.
-	public Text numberOfCoinsText;
+	public Text numberOfCoinsText; //These are updated via the PlayerController Collisions etc.
 	public Text numberOfHitsText;
-	public float numberOfCoins = 0;
-	public float numberOfHits = 0;
+	public int numberOfCoins = 0;
+	public int numberOfHits = 0;
+
+	//Game Over Canvas Items
+	public GameObject gameOverCanvasObj;
+	public Text currentScoreText;
+	public Text currentCoinsText;
+	public Text currentZoneText;
+	public Text bestScoreText;
+	public Text bestCoinsText;
+	public Text bestZoneText;
+	public Text totalCoinsText;
 
 	public float SCENE_SPEED;
 
@@ -95,6 +103,19 @@ public class LevelSceneController : MonoBehaviour {
 
 		//Should probably not do this timescale change when all said and done
 		Time.timeScale = 0f;
+
+		//Check to see if any bests need to be updated!
+		currentScoreText.text = "Score: 100";
+		currentCoinsText.text = "Coins: " + numberOfCoins;
+		currentZoneText.text = "Zone: 2";
+		bestScoreText.text = "Best Score: " + PlayerPrefs.GetInt (PlayerConstants.Player_BestScore);
+		bestCoinsText.text = "Best Coins: " + PlayerPrefs.GetInt (PlayerConstants.Player_BestCoins);
+		bestZoneText.text = "Best Zone: " + PlayerPrefs.GetInt (PlayerConstants.Player_BestZone);
+		PlayerPrefs.SetInt (PlayerConstants.Player_TotalCoins, PlayerPrefs.GetInt (PlayerConstants.Player_TotalCoins) + numberOfCoins);
+		totalCoinsText.text = "Total Coins: " + PlayerPrefs.GetInt (PlayerConstants.Player_TotalCoins);
+
+		PlayerPrefs.Save ();
+
 		scoreCanvasObj.SetActive (false);
 		gameOverCanvasObj.SetActive (true);
 
