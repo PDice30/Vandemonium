@@ -9,6 +9,10 @@ public class CoinMover : MonoBehaviour {
 	//public GameObject sceneControllerObj;
 	public LevelSceneController levelSceneController;
 
+	public AudioClip coinAudioClip;
+	public AudioSource coinAudioSource;
+	//public AudioSource;
+
 	private Vector3 coinRotation;
 	private Transform coinTransform;
 
@@ -19,6 +23,9 @@ public class CoinMover : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
 		levelSceneController = GameObject.Find ("LevelSceneController").GetComponent<LevelSceneController>();
+		coinAudioSource = gameObject.GetComponent<AudioSource> ();
+		coinAudioClip = coinAudioSource.clip;
+		//audioListener = levelSceneController.playerCamera.gameObject.GetComponent<AudioListener> ();
 	}
 
 	void Start () {
@@ -33,6 +40,7 @@ public class CoinMover : MonoBehaviour {
 			coinTransform.Translate (0, 0, -(Time.deltaTime * coinVelocity * levelSceneController.SCENE_SPEED), Space.World);
 			coinTransform.Rotate (60 * Time.deltaTime, 0, 0, Space.Self);
 		} else {
+			//Was Collected
 			coinTransform.Translate (0, 4f * Time.deltaTime * coinVelocity, 0, Space.World);
 			coinTransform.Rotate (900 * Time.deltaTime, 0, 0, Space.Self);
 			//Probably bad to call new so much here

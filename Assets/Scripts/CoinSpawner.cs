@@ -8,6 +8,8 @@ public class CoinSpawner : MonoBehaviour {
 	private float spawnInterval;
 	private float timeUntilNextSpawn;
 
+	int coinRunRand;
+
 	public GameObject coinPrefab;
 
 	void Awake () {
@@ -22,9 +24,21 @@ public class CoinSpawner : MonoBehaviour {
 
 	void Update () {
 		if (timeUntilNextSpawn <= 0) {
-			GameObject newCoin = Instantiate (coinPrefab, new Vector3 (chooseLane(), 1, SceneConstants.OBJECT_SPAWN_POSITION), coinPrefab.transform.rotation) as GameObject;
-			setupNewCoin (newCoin);
+			//See if it's a coin run!
+			coinRunRand = Random.Range(0, 99);
+			if (coinRunRand <= SceneConstants.COIN_RUN_CHANCE) {
+				float laneToSpawn = chooseLane ();
+				for (int i = 0; i < Random.Range(SceneConstants.MIN_COIN_RUN, SceneConstants.MAX_COIN_RUN); i++) {
+					GameObject newCoin = Instantiate (coinPrefab, new Vector3 (laneToSpawn, 1, SceneConstants.OBJECT_SPAWN_POSITION + i), coinPrefab.transform.rotation) as GameObject;
+					setupNewCoin (newCoin);
+				}
+			} else {
+				GameObject newCoin = Instantiate (coinPrefab, new Vector3 (chooseLane(), 1, SceneConstants.OBJECT_SPAWN_POSITION), coinPrefab.transform.rotation) as GameObject;
+				setupNewCoin (newCoin);
+			}
+
 			timeUntilNextSpawn = spawnInterval;
+
 		}
 
 		timeUntilNextSpawn -= (Time.deltaTime * levelSceneController.SCENE_SPEED);

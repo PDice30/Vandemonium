@@ -299,10 +299,12 @@ public class PlayerController : MonoBehaviour {
 		//Depending on type of coin, get value
 		//Find an easier way to get component for these checks
 		if (coll.gameObject.tag.Equals("Coin")) {
-			if (coll.gameObject.GetComponent<CoinMover> ().hasBeenCollected == false) {
+			CoinMover coinMover = coll.gameObject.GetComponent<CoinMover> ();
+			if (coinMover.hasBeenCollected == false) {
 				levelSceneController.numberOfCoins += 1;
 				levelSceneController.numberOfCoinsText.text = "Coins: " + levelSceneController.numberOfCoins;
-				coll.gameObject.GetComponent<CoinMover> ().hasBeenCollected = true;
+				coinMover.coinAudioSource.PlayOneShot (coinMover.coinAudioClip);
+				coinMover.hasBeenCollected = true;
 			}
 
 			//Destroy (coll.gameObject);

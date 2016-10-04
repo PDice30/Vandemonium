@@ -39,6 +39,9 @@ namespace UnityEngine {
 		//// Coins ////
 		public const float BASE_COIN_SPAWN_TIME = 5.0f;
 		public const float BASE_COIN_VELOCITY = 1.0f;
+		public const int MIN_COIN_RUN = 7;
+		public const int MAX_COIN_RUN = 15;
+		public const int COIN_RUN_CHANCE = 30;
 
 
 		//// Player Settings ////

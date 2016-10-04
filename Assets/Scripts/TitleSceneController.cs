@@ -12,16 +12,28 @@ public class TitleSceneController : MonoBehaviour {
 	public GameObject buddyThreeChosen;
 	public GameObject buddyFourChosen;
 	public GameObject buddyFiveChosen;
+
 	private GameObject buddyCurrentlySelected; // One of these 5 Chosen Buddies
+	private PlayerBuddy buddyScrollCurrentlySelected; //Buddy from the scroll view, not yet chosen
 
 	public GameObject startButtonObject;
 
 	public GameObject selectBuddyPanel;
 
+	//Buddy Stats Panel
+	//These might want to be prefabs for easier loading of buddy info, and then instantiate.
+	public GameObject buddyStatsPanel;
+	public Image buddyStatsImage;
+	public Text buddyStatsName;
+	public Text buddyStatsTitle;
+
+
+
 	public GameObject buddyScrollView;
 	public GameObject buddyScrollViewContent;
 
 	public Sprite[] buddyImages = new Sprite[SceneConstants.NUMBER_OF_PLAYER_BUDDIES];
+	public Sprite lockedBuddyImage;
 
 	public List<PlayerBuddy> playerBuddyCatalog = new List<PlayerBuddy> ();
 	public List<PlayerBuddy> finalChosenPlayerBuddies = new List<PlayerBuddy> ();
@@ -49,6 +61,11 @@ public class TitleSceneController : MonoBehaviour {
 
 	void Awake () {
 
+		//TODO Currently when returning to the scene, all of this stuff needs to be reloaded
+		//Is this the proper way to do this?
+		//What about when someone level's up their buddy?
+		//Just change that buddy in the list?
+
 		/**
 		 * Set all of the canvas's camera components to the main camera
 		 * and set them all not active
@@ -62,10 +79,12 @@ public class TitleSceneController : MonoBehaviour {
 		//If they have chronologist as buddy 1, keep it buddy 1.
 
 		//Will Only happen once
-		//if (PlayerPrefs.GetInt ("Player_FirstTimePlaying", 1) == 1) {
+		if (PlayerPrefs.GetInt ("Player_FirstTimePlaying", 0) == 1) {
 			setupInitialPlayerPrefs ();
-		//} 
+		} 
 
+		//Probably put this in a function that can also be called when a player levels up a buddy
+		// or unlocks a buddy
 		float xIncrement = 0f;
 		for (int i = 0; i < SceneConstants.NUMBER_OF_PLAYER_BUDDIES; i++) {
 			GameObject newObject = new GameObject ();
@@ -100,11 +119,16 @@ public class TitleSceneController : MonoBehaviour {
 			}
 
 			//Set Image of this button
+			//If not unlocked, have different sprite and not clickable
 			newPlayerBuddy.GetComponent<Button>().image.sprite = buddyImages[i];
+			if (!playerBuddy.isUnlocked) {
+				newPlayerBuddy.GetComponent<Button>().image.color = Color.black;
+			} 
+
 
 			//The Newlw created button references the buddy created from this script
 			newPlayerBuddy.GetComponent<Button> ().onClick.AddListener(() => { 
-				buddyScrollButtonClicked(playerBuddy); 
+				initialBuddyScrollButtonClicked(playerBuddy); 
 			});
 
 		}
@@ -140,27 +164,7 @@ public class TitleSceneController : MonoBehaviour {
 	}
 
 
-	//Instead, pass an int as well to represent the image index
-	public void buddyScrollButtonClicked(PlayerBuddy buddy) {
-		Debug.Log ("added player buddy object:" + buddy.name);
-		buddyCurrentlySelected.GetComponent<ChosenBuddy> ().buddy = buddy;
-		buddyCurrentlySelected.GetComponent<Button> ().image.sprite = buddyImages [buddy.buddyId];
-		//Cycles through the chosen buddies and sees if the selected buddy is a duplicate and removes it from the chosen list.
-		foreach (GameObject chosenBuddyButton in chosenBuddyButtons) {
-			if ((chosenBuddyButton != buddyCurrentlySelected) &&
-			    (chosenBuddyButton.GetComponent<ChosenBuddy> ().buddy == buddyCurrentlySelected.GetComponent<ChosenBuddy> ().buddy)) {
-				chosenBuddyButton.GetComponent<ChosenBuddy> ().buddy = null;
-				chosenBuddyButton.GetComponent<Button> ().image.sprite = null;
-			}
-		}
-			
-		selectBuddyPanel.SetActive (false);
-		buddyScrollView.SetActive (false);
-		startButtonObject.SetActive (true);
-		playCanvasBackButton.SetActive (true);
-
-	}
-
+	/********** UI and Button Navigation *************/
 
 	public void buddyChosenButtonClicked(Button buddyButton) {
 		buddyCurrentlySelected = buddyButton.gameObject;
@@ -169,6 +173,55 @@ public class TitleSceneController : MonoBehaviour {
 		buddyScrollView.SetActive (true);
 		playCanvasBackButton.SetActive (false);
 		startButtonObject.SetActive (false);
+
+	}
+
+	//This will open a panel that displays the buddy's stats and such
+	public void initialBuddyScrollButtonClicked(PlayerBuddy buddy) {
+		buddyScrollCurrentlySelected = buddy;
+		buddyStatsImage.sprite = buddyImages [buddy.buddyId];
+		if (!buddy.isUnlocked) {
+			buddyStatsImage.color = Color.black;
+		}
+		buddyStatsName.text = buddy.buddyName;
+		buddyStatsTitle.text = buddy.buddyTitle;
+
+		selectBuddyPanel.SetActive (false);
+		buddyScrollView.SetActive (false);
+		buddyStatsPanel.SetActive (true);
+	}
+
+	// This will actually be the buddy CONFIRMATION Button function
+	//Instead, pass an int as well to represent the image index
+	public void buddyStatsPanelConfirmClicked() {
+		Debug.Log ("added player buddy object:" + buddyScrollCurrentlySelected.name);
+		buddyCurrentlySelected.GetComponent<ChosenBuddy> ().buddy = buddyScrollCurrentlySelected;
+		buddyCurrentlySelected.GetComponent<Button> ().image.sprite = buddyImages [buddyScrollCurrentlySelected.buddyId];
+		//Cycles through the chosen buddies and sees if the selected buddy is a duplicate and removes it from the chosen list.
+		foreach (GameObject chosenBuddyButton in chosenBuddyButtons) {
+			if ((chosenBuddyButton != buddyCurrentlySelected) &&
+			    (chosenBuddyButton.GetComponent<ChosenBuddy> ().buddy == buddyCurrentlySelected.GetComponent<ChosenBuddy> ().buddy)) {
+				chosenBuddyButton.GetComponent<ChosenBuddy> ().buddy = null;
+				chosenBuddyButton.GetComponent<Button> ().image.sprite = null;
+			}
+		}
+
+		buddyScrollCurrentlySelected = null;
+		selectBuddyPanel.SetActive (false);
+		buddyStatsPanel.SetActive (false);
+		buddyScrollView.SetActive (false);
+		startButtonObject.SetActive (true);
+		playCanvasBackButton.SetActive (true);
+
+	}
+
+	public void buddyStatsPanelCancelClicked() {
+		buddyScrollCurrentlySelected = null;
+		selectBuddyPanel.SetActive (false);
+		buddyStatsPanel.SetActive (false);
+		buddyScrollView.SetActive (false);
+		startButtonObject.SetActive (true);
+		playCanvasBackButton.SetActive (true);
 
 	}
 
@@ -202,40 +255,75 @@ public class TitleSceneController : MonoBehaviour {
 	}
 
 
+	/* Setup all of the players initial prefs for first time playing */
 	void setupInitialPlayerPrefs() {
-		PlayerPrefs.SetInt ("Player_FirstTimePlaying", 0);
+		PlayerPrefs.SetInt (PlayerConstants.Player_FirstTimePlaying, 0);
+
+		//Player Setup
+		PlayerPrefs.SetInt(PlayerConstants.Player_TotalCoins, 0);
+		PlayerPrefs.SetInt(PlayerConstants.Player_BestScore, 0);
+		PlayerPrefs.SetInt(PlayerConstants.Player_BestCoins, 0);
+		PlayerPrefs.SetInt(PlayerConstants.Player_BestZone, 0);
 		//Chronologist Setup
-		PlayerPrefs.SetInt ("Player_HasUnlockedChronologist", 1);
-		PlayerPrefs.SetInt ("Buddy_Chronologist_Level", 1);
-		PlayerPrefs.SetFloat ("Buddy_Chronologist_CameraSlowdownPercentage", 0.5f);
-		PlayerPrefs.SetFloat ("Buddy_Chronologist_CameraSlowdownTime", 0f);
-		PlayerPrefs.SetFloat ("Buddy_Chronologist_CameraSlowdownTime", 0f);
+		PlayerPrefs.SetInt (PlayerConstants.Player_HasUnlockedChronologist, 1);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Chronologist_Level, 1);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Chronologist_CameraSlowdownPercentage, 0.5f);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Chronologist_CameraSlowdownTime, 0f);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Chronologist_RelativePlayerSpeed, 0f);
 		//Rocket Setup
-		PlayerPrefs.SetInt ("Player_HasUnlockedRocker", 1);
-		PlayerPrefs.SetInt ("Buddy_Rocker_Level", 1);
+		PlayerPrefs.SetInt (PlayerConstants.Player_HasUnlockedRocker, 1);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Rocker_Level, 1);
 		PlayerPrefs.SetInt (PlayerConstants.Buddy_Rocker_CarsDoCollide, 1);
-		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Rocker_CarsCollisionForceMultiplier, 3f);
-		PlayerPrefs.SetFloat ("Buddy_Chronologist_CameraSlowdownTime", 0f);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Rocker_CarsCollisionForceMultiplier, 1.5f);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Rocker_HasShieldUpgrade, 0);
 		//Radiologist Setup
-		PlayerPrefs.SetInt ("Player_HasUnlockedRadiologist", 0);
-		PlayerPrefs.SetInt ("Buddy_Chronologist_Level", 1);
-		PlayerPrefs.SetFloat ("Buddy_Chronologist_CameraSlowdownPercentage", 0.5f);
-		PlayerPrefs.SetFloat ("Buddy_Chronologist_CameraSlowdownTime", 0f);
-		PlayerPrefs.SetFloat ("Buddy_Chronologist_CameraSlowdownTime", 0f);
+		PlayerPrefs.SetInt (PlayerConstants.Player_HasUnlockedRadiologist, 1);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Radiologist_Level, 1);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Radiologist_XRayTime, 2.0f);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Radiologist_HasNightVision, 0);
 		//Pilferer Setup
-		PlayerPrefs.SetInt ("Player_HasUnlockedPilferer", 0);
+		PlayerPrefs.SetInt (PlayerConstants.Player_HasUnlockedPilferer, 1);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Pilferer_Level, 1);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Pilferer_DayCoinBonus, 1.05f);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Pilferer_NightCoinBonus, 1.1f);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Pilferer_CanMarkCarWithTreasure, 0);
 		//Medium Setup
-		PlayerPrefs.SetInt ("Player_HasUnlockedMedium", 0);
-		//Pilferer Setup
-		PlayerPrefs.SetInt ("Player_HasUnlockedSidewinder", 0);
+		PlayerPrefs.SetInt (PlayerConstants.Player_HasUnlockedMedium, 1);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Medium_Level, 1);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Medium_AdditionalCrystalFrequency, 1.2f);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Medium_CrystalDurationBonus, 2f);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Medium_IsInvulnerableDuringCrystal, 0);
+		//Sidewinder Setup
+		PlayerPrefs.SetInt (PlayerConstants.Player_HasUnlockedSidewinder, 0);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Sidewinder_Level, 1);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Sidewinder_LaneChangeSpeed, 1.5f);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Sidewinder_HasTeleport, 0);
 		//Diviner Setup
-		PlayerPrefs.SetInt ("Player_HasUnlockedDiviner", 0);
+		PlayerPrefs.SetInt (PlayerConstants.Player_HasUnlockedDiviner, 0);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Diviner_Level, 1);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Diviner_ShieldDuration, 2f);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Diviner_HasDestroyAllCarsOnDamage, 0);
 		//Mechanic Setup
-		PlayerPrefs.SetInt ("Player_HasUnlockedMechanic", 0);
+		PlayerPrefs.SetInt (PlayerConstants.Player_HasUnlockedMechanic, 0);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Mechanic_Level, 1);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Mechanic_ExtraHealth, 1);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Mechanic_AdditionalHealthSpawnFrequency, 1.2f);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Mechanic_CanActivateSavior, 0);
 		//Jester Setup
-		PlayerPrefs.SetInt ("Player_HasUnlockedJester", 0);
+		PlayerPrefs.SetInt (PlayerConstants.Player_HasUnlockedJester, 0);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Jester_Level, 1);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Jester_LaneChangeFrequency, 10f);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Jester_CameraChangeRefillBonus, 2f);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Jester_CanIgnoreDamage, 0);
 		//Doomsayer Setup
-		PlayerPrefs.SetInt ("Player_HasUnlockedDoomsayer", 0);
+		PlayerPrefs.SetInt (PlayerConstants.Player_HasUnlockedDoomsayer, 0);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Doomsayer_Level, 1);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Doomsayer_SpeechBubbleFrequency, 10f);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Doomsayer_BadSpeechBubbleSize, 10f);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Doomsayer_GoodSpeechBubbleSize, 2f);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Doomsayer_CanEnterBubbleBlast, 0);
+
+		//
 		Debug.Log ("First Time Setup complete");
 
 	}
