@@ -32,6 +32,9 @@ public class PlayerController : MonoBehaviour {
 	private Transform sideCam;
 	private Transform frontCam;
 
+	//Player Position etc
+	public int currentLaneIndex;
+
 	//Booleans
 	public bool isPlayerInvulnerable = false;
 	public bool isCameraMoving = false;
@@ -85,6 +88,8 @@ public class PlayerController : MonoBehaviour {
 		//This will likely not need to be stored at all by the player themselves
 		cameraChangeTime = 1.0f;
 		laneChangeTime = 0.25f;
+
+		currentLaneIndex = (levelSceneController.lanes.Count / 2);  //Int rounded to mid lane
 	}
 
 	void Update () {
@@ -107,34 +112,13 @@ public class PlayerController : MonoBehaviour {
 
 
 		//Move Camera - Debug based on keys
-		//TODO Testing Xray!!
-		// Don't actually change the prefab material, instead change the material of the new object
-		// as soon as it's instantiated.
 		if (Input.GetKeyDown (KeyCode.T) && currentCamTransform != topCam && !isCameraMoving) {
-			//GameObject.Find("CarSpawner").GetComponent<CarSpawner>().enemyCarPrefab.GetComponent<MeshRenderer>().material = Resources.Load ("Enemy_Car_XRay") as Material;
-			GameObject[] enemyCarArray = GameObject.FindGameObjectsWithTag ("EnemyCar");
-			for (int i = 0; i < enemyCarArray.Length; i++) {
-				enemyCarArray [i].GetComponent<MeshRenderer> ().material = Resources.Load ("Enemy_Car_XRay") as Material;
-			}
-			//Also Change the prefab
 			isCameraMoving = true;
 			StartCoroutine(changeCamera(topCam, cameraChangeTime));
 		} else if (Input.GetKeyDown (KeyCode.S) && currentCamTransform != sideCam && !isCameraMoving) {
-			//GameObject.Find("CarSpawner").GetComponent<CarSpawner>().enemyCarPrefab.GetComponent<MeshRenderer>().material = Resources.Load ("Enemy_Car_XRay") as Material;
-			GameObject[] enemyCarArray = GameObject.FindGameObjectsWithTag ("EnemyCar");
-			for (int i = 0; i < enemyCarArray.Length; i++) {
-				enemyCarArray [i].GetComponent<MeshRenderer> ().material = Resources.Load ("Enemy_Car_XRay") as Material;
-			}
-			//Also Change the prefab
 			isCameraMoving = true;
 			StartCoroutine(changeCamera(sideCam, cameraChangeTime));
 		} else if (Input.GetKeyDown (KeyCode.F) && currentCamTransform != frontCam && !isCameraMoving) {
-			//GameObject.Find("CarSpawner").GetComponent<CarSpawner>().enemyCarPrefab.GetComponent<MeshRenderer>().material = Resources.Load ("Enemy_Car_XRay") as Material;
-			GameObject[] enemyCarArray = GameObject.FindGameObjectsWithTag ("EnemyCar");
-			for (int i = 0; i < enemyCarArray.Length; i++) {
-				enemyCarArray [i].GetComponent<MeshRenderer> ().material = Resources.Load ("Enemy_Car_XRay") as Material;
-			}
-			//Also Change the prefab
 			isCameraMoving = true;
 			StartCoroutine(changeCamera(frontCam, cameraChangeTime));
 		}
@@ -174,17 +158,9 @@ public class PlayerController : MonoBehaviour {
 				//Determine if its a temp camera change
 			} else if (currentCamTransform == topCam && vertical == 1) {
 				isCameraMoving = true;
-				GameObject[] enemyCarArray = GameObject.FindGameObjectsWithTag ("EnemyCar");
-				for (int i = 0; i < enemyCarArray.Length; i++) {
-					enemyCarArray [i].GetComponent<MeshRenderer> ().material = Resources.Load ("Enemy_Car_XRay") as Material;
-				}
 				StartCoroutine(changeCamera(frontCam, cameraChangeTime));
 			} else if (currentCamTransform == frontCam && vertical == 1) {
 				isCameraMoving = true;
-				GameObject[] enemyCarArray = GameObject.FindGameObjectsWithTag ("EnemyCar");
-				for (int i = 0; i < enemyCarArray.Length; i++) {
-					enemyCarArray [i].GetComponent<MeshRenderer> ().material = Resources.Load ("Enemy_Car_XRay") as Material;
-				}
 				StartCoroutine(changeCamera(topCam, cameraChangeTime));
 			}
 		}
@@ -204,9 +180,10 @@ public class PlayerController : MonoBehaviour {
 
 		float timeLeft = 0;
 		inputEnabled = false;
-		if (direction == -1) { //Move left/Up, check for LANE!
+		if (direction == -1 && !levelSceneController.lanes[currentLaneIndex].isLeftmostLane) { //Move left/Up, check for LANE!
 			isCarMovingLeft = true;
-			float newXPos = playerTransform.position.x - 3.0f;
+			currentLaneIndex -= 1;
+			float newXPos = levelSceneController.lanes[currentLaneIndex].transform.position.x;
 			Vector3 originalPlayerPosition = playerTransform.position;
 			Vector3 newPlayerPosition = new Vector3 (newXPos, playerTransform.position.y, playerTransform.position.z);
 			while (timeLeft < laneChangeTime) {
@@ -217,9 +194,10 @@ public class PlayerController : MonoBehaviour {
 
 
 
-		} else if (direction == 1) { //Move right/down, check for LANE!
+		} else if (direction == 1 && !levelSceneController.lanes[currentLaneIndex].isRightmostLane) { //Move right/down, check for LANE!
 			isCarMovingRight = true;
-			float newXPos = playerTransform.position.x + 3.0f;
+			currentLaneIndex += 1;
+			float newXPos = levelSceneController.lanes[currentLaneIndex].transform.position.x;
 			Vector3 originalPlayerPosition = playerTransform.position;
 			Vector3 newPlayerPosition = new Vector3 (newXPos, playerTransform.position.y, playerTransform.position.z);
 			while (timeLeft < laneChangeTime) {
@@ -227,6 +205,8 @@ public class PlayerController : MonoBehaviour {
 				playerTransform.position = Vector3.Lerp(originalPlayerPosition, newPlayerPosition, (timeLeft / laneChangeTime));
 				yield return null;
 			}
+
+
 		}
 
 		isCarMovingLeft = false;
@@ -237,20 +217,30 @@ public class PlayerController : MonoBehaviour {
 
 	//Function to move camera should have inputs based on the player's camera slowdown level
 	private IEnumerator changeCamera(Transform targetCamTransform, float changeTime) {
-		
+
+		/**********
+		*BuddyCheck here for Chronologist slowdown and Radiologist XRay
+		/*********/
+		//GameObject.Find("CarSpawner").GetComponent<CarSpawner>().enemyCarPrefab.GetComponent<MeshRenderer>().material = Resources.Load ("Enemy_Car_XRay") as Material;
+		//Cant change the prefab, instead change the material when it is instantiated
 		foreach (PlayerBuddy buddy in playerBuddies) {
 			//Null check probably not necessary
 			if (buddy != null) {
 				if (buddy.buddyCheck(BuddySkillEnum.Chronologist)) { // Returns true if buddy has that skill
 					Time.timeScale = (Time.timeScale * buddy.chronologist_cameraSlowdownPercentage);
 				}
+				if (buddy.buddyCheck (BuddySkillEnum.Radiologist)) {
+					GameObject[] enemyCarArray = GameObject.FindGameObjectsWithTag ("EnemyCar");
+					for (int i = 0; i < enemyCarArray.Length; i++) {
+						enemyCarArray [i].GetComponent<MeshRenderer> ().material = Resources.Load ("Enemy_Car_XRay") as Material;
+					}
+				}	
 			}
 		}
 
 		//Maybe set timeLeft higher and then subtract delta time? Makes more sense that way.
 		float timeLeft = 0;
 		while (timeLeft < changeTime) {
-
 			timeLeft += Time.deltaTime;
 			playerCamTransform.position = Vector3.Lerp (currentCamTransform.position, targetCamTransform.position, (timeLeft / changeTime));
 			//Quaternion.Slerp here maybe?
@@ -269,6 +259,7 @@ public class PlayerController : MonoBehaviour {
 		/*
 		 * Collision with Car
 		 */ 
+		int remainingCarCollisions = 0;
 		if (coll.gameObject.tag.Equals("EnemyCar")) {
 			if (coll.gameObject.GetComponent<Rigidbody> ().isKinematic) {
 				playerHealth -= 1;
@@ -277,14 +268,20 @@ public class PlayerController : MonoBehaviour {
 					levelSceneController.beginGameOver ();
 				}	
 
+				foreach (PlayerBuddy buddy in levelSceneController.playerBuddies) {
+					if (buddy.buddyCheck (BuddySkillEnum.Rocker)) {
+						remainingCarCollisions = buddy.rocker_numberOfCarCollisions;
+					}
+				}
+
 				levelSceneController.numberOfHits += 1;
 				levelSceneController.numberOfHitsText.text = "Hits: " + levelSceneController.numberOfHits;
 				if (isCarMovingRight) {
-					coll.gameObject.GetComponent<EnemyCarMover> ().markForDestroy (0); // Parameter based on direction
+					coll.gameObject.GetComponent<EnemyCarMover> ().markForDestroy (0, remainingCarCollisions); // Parameter based on direction
 				} else if (isCarMovingLeft) {
-					coll.gameObject.GetComponent<EnemyCarMover> ().markForDestroy (1); // Parameter based on direction
+					coll.gameObject.GetComponent<EnemyCarMover> ().markForDestroy (1, remainingCarCollisions); // Parameter based on direction
 				} else {
-					coll.gameObject.GetComponent<EnemyCarMover> ().markForDestroy (2); // Parameter based on direction
+					coll.gameObject.GetComponent<EnemyCarMover> ().markForDestroy (2, remainingCarCollisions); // Parameter based on direction
 				}
 
 			}

@@ -15,12 +15,17 @@ public class LevelSceneController : MonoBehaviour {
 
 	public GameObject playerCarPrefab;
 
+
+	public List<Lane> lanes;
+	public GameObject lanePrefab;
+
 	//Score Canvas Items
 	public GameObject scoreCanvasObj;
 	public Text numberOfCoinsText; //These are updated via the PlayerController Collisions etc.
 	public Text numberOfHitsText;
 	public int numberOfCoins = 0;
 	public int numberOfHits = 0;
+
 
 	//Game Over Canvas Items
 	public GameObject gameOverCanvasObj;
@@ -51,13 +56,15 @@ public class LevelSceneController : MonoBehaviour {
 		}
 		itemsToDestroy.Add (titleSceneController.gameObject);
 
+		lanes = generateLanes (5, -6f, 2f, 3f);
+
 	}
 
 	void Start () {
+		//TODO Player spawned based on lanes
 		GameObject playerCar = Instantiate (playerCarPrefab, new Vector3 (0f, 0.5f, -10f), Quaternion.identity) as GameObject;
 		lightController.PlayerSpotlight = playerCar.GetComponentInChildren<Light> ();
 		//playerCarPrefab.GetComponent<PlayerController> ().sceneController = gameObject.GetComponent<SceneController> ();
-		
 	}
 	void Update () {
 		
@@ -125,6 +132,24 @@ public class LevelSceneController : MonoBehaviour {
 		//levelSceneController.
 		//destroyItemsOnChange();
 		//SceneManager.LoadScene("TitleScene");
+	}
+
+	public List<Lane> generateLanes(int numberOfLanes, float xPos, float laneWidth, float laneSpacing) {
+		List<Lane> newLaneList = new List<Lane> ();
+		for (int i = 0; i < numberOfLanes; i++) {
+			GameObject newLane = Instantiate (lanePrefab, new Vector3 (xPos, 0.01f, 0f), lanePrefab.transform.rotation) as GameObject;
+			if (i == 0) {
+				newLane.GetComponent<Lane> ().isLeftmostLane = true;
+			}
+			if (i == (numberOfLanes - 1)) {
+				newLane.GetComponent<Lane> ().isRightmostLane = true;
+			}
+			newLane.transform.localScale = new Vector3 (laneWidth, 40f, 1f);
+			newLaneList.Add(newLane.GetComponent<Lane>());
+			xPos += laneSpacing;
+		}
+
+		return newLaneList;
 	}
 
 }

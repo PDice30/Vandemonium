@@ -44,8 +44,8 @@ public class TerrainSpawner : MonoBehaviour {
 
 	//Will need to be based on the current level width to not interfere with lanes
 	private float getXPos() {
-		int side = Random.Range (0, 2);
-
+		//int side = Random.Range (0, 2);
+		int side = 0;
 		if (side == 0) { //Left Side - x between -8 and -14
 			return Random.Range(-13.5f, -7.5f);
 		} else { //Right Side - x between 8 and 14

@@ -8,7 +8,7 @@ public class CarSpawner : MonoBehaviour {
 	private float spawnInterval;
 	private float timeUntilNextSpawn;
 
-	public GameObject enemyCarPrefab;
+	public GameObject[] enemyCarPrefabs = new GameObject[3];
 
 	//To be used for the speed multipliers, etc.
 	private int playerDifficulty = 1;
@@ -23,13 +23,17 @@ public class CarSpawner : MonoBehaviour {
 	void Start () {
 		spawnInterval = SceneConstants.BASIC_CAR_SPAWN_TIME;
 		timeUntilNextSpawn = SceneConstants.BASIC_CAR_SPAWN_TIME;
-		enemyCarPrefab.GetComponent<EnemyCarMover> ().levelSceneController = levelSceneController;
+		for (int i = 0; i < enemyCarPrefabs.Length; i++) {
+			enemyCarPrefabs[i].GetComponent<EnemyCarMover> ().levelSceneController = levelSceneController;
+		}
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if (timeUntilNextSpawn <= 0) {
-			GameObject newCar = Instantiate (enemyCarPrefab, new Vector3 (chooseLane (), 0, SceneConstants.OBJECT_SPAWN_POSITION), Quaternion.identity) as GameObject;
+			int randomCar = Random.Range (0, 3);
+			GameObject newCar = Instantiate (enemyCarPrefabs[randomCar], new Vector3 (chooseLane (), 0, SceneConstants.OBJECT_SPAWN_POSITION), Quaternion.identity) as GameObject;
 			setupNewCar (newCar);
 			timeUntilNextSpawn = spawnInterval;
 		}
@@ -50,19 +54,7 @@ public class CarSpawner : MonoBehaviour {
 
 	private float chooseLane() {
 		//Will depend on how many lanes there are
-		switch (Random.Range(0, 5)) {
-		case 0:
-			return -6f;
-		case 1:
-			return -3f;
-		case 2:
-			return 0f;
-		case 3:
-			return 3f;
-		case 4:
-			return 6f;
-		default:
-			return 0f;
-		}
+		int laneChoice = Random.Range(0, levelSceneController.lanes.Count);
+		return levelSceneController.lanes [laneChoice].transform.position.x;
 	}
 }

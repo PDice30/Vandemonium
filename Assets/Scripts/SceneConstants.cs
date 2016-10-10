@@ -5,7 +5,7 @@ namespace UnityEngine {
 		public const float PLAYER_VELOCITY = 1.0f;
 		public const float PLAYER_VELOCITY_MULTIPLYER = 1.0f;
 
-		public const float BASE_SCENE_SPEED = 2.0f;
+		public const float BASE_SCENE_SPEED = 3.0f;
 
 		public const float BASIC_CAR_SPAWN_TIME = 1.2f;
 		public const float BASIC_BRIDGE_SPAWN_TIME = 60.0f;
