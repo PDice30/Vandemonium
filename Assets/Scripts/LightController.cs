@@ -50,4 +50,11 @@ public class LightController : MonoBehaviour {
 		}
 		*/
 	}
+
+	public void switchLighting() {
+		SunSource.GetComponent<Light> ().enabled = !SunSource.GetComponent<Light> ().enabled;
+		NightSource.GetComponent<Light> ().enabled = !NightSource.GetComponent<Light> ().enabled;
+		PlayerSpotlight.GetComponent<Light> ().enabled = !PlayerSpotlight.GetComponent<Light> ().enabled;
+	}
+
 }

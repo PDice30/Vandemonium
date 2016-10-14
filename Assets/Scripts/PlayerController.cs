@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviour {
 	private Camera playerCamera;
 	private Transform playerCamTransform;
 	private Transform currentCamTransform;
+	private Transform introCam;
 	private Transform topCam;
 	private Transform sideCam;
 	private Transform frontCam;
@@ -46,13 +47,14 @@ public class PlayerController : MonoBehaviour {
 	private float journeyLength;
 
 	//Player is moving - allowed to move
-	private bool inputEnabled = true;
+	private bool inputEnabled = false;
 
 	//Touch init
 	private Vector2 touchOrigin = -Vector2.one;
 
 	void Awake() {
 		playerCamera = GameObject.Find ("PlayerCamera").GetComponent<Camera> ();
+		introCam = GameObject.Find ("IntroCamera").GetComponent<Transform> ();
 		topCam = GameObject.Find ("TopCamera").GetComponent<Transform>();
 		sideCam = GameObject.Find ("SideCamera").GetComponent<Transform>();
 		frontCam = GameObject.Find ("FrontCamera").GetComponent<Transform>();
@@ -80,7 +82,7 @@ public class PlayerController : MonoBehaviour {
 
 		playerTransform = gameObject.transform;
 		playerCamTransform = playerCamera.transform;
-		currentCamTransform = topCam;
+		currentCamTransform = introCam;
 
 		//Based on player slowdown cam change level
 		//TODO
@@ -90,6 +92,8 @@ public class PlayerController : MonoBehaviour {
 		laneChangeTime = 0.25f;
 
 		currentLaneIndex = (levelSceneController.lanes.Count / 2);  //Int rounded to mid lane
+
+		StartCoroutine(startIntro(topCam));
 	}
 
 	void Update () {
@@ -252,6 +256,20 @@ public class PlayerController : MonoBehaviour {
 		Time.timeScale = 1.0f;
 		currentCamTransform = targetCamTransform;
 		isCameraMoving = false;
+	}
+
+	private IEnumerator startIntro(Transform targetCamTransform) {
+		float timeLeft = 0;
+		float changeTime = 2;
+		while (timeLeft < changeTime) {
+			timeLeft += Time.deltaTime;
+			playerCamTransform.position = Vector3.Lerp (currentCamTransform.position, targetCamTransform.position, (timeLeft / changeTime));
+			playerCamTransform.rotation = Quaternion.Lerp (currentCamTransform.rotation, targetCamTransform.rotation, (timeLeft / changeTime));
+			yield return null;
+		}
+		currentCamTransform = targetCamTransform;
+
+		inputEnabled = true;
 	}
 
 

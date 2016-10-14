@@ -26,6 +26,9 @@ public class LevelSceneController : MonoBehaviour {
 	public int numberOfCoins = 0;
 	public int numberOfHits = 0;
 
+	private float timeInCurrentZone = 0;
+	private float gameStartTime = 0;
+
 
 	//Game Over Canvas Items
 	public GameObject gameOverCanvasObj;
@@ -65,9 +68,21 @@ public class LevelSceneController : MonoBehaviour {
 		GameObject playerCar = Instantiate (playerCarPrefab, new Vector3 (0f, 0.5f, -10f), Quaternion.identity) as GameObject;
 		lightController.PlayerSpotlight = playerCar.GetComponentInChildren<Light> ();
 		//playerCarPrefab.GetComponent<PlayerController> ().sceneController = gameObject.GetComponent<SceneController> ();
+		gameStartTime = Time.time;
 	}
 	void Update () {
-		
+		//Testing Zone Transitions etc.
+		timeInCurrentZone += Time.deltaTime;
+
+		if (Time.time - gameStartTime >= 10) {
+			Debug.Log ("" + timeInCurrentZone);
+			gameStartTime = Time.time;
+		}
+
+		if (timeInCurrentZone >= 60) {
+			lightController.switchLighting ();
+			timeInCurrentZone = 0;
+		}
 	}
 
 	public void getBuddies(List<PlayerBuddy> buddies) {
