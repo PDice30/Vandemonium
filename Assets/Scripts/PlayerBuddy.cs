@@ -20,6 +20,7 @@ public class PlayerBuddy : MonoBehaviour {
 	public float chronologist_relativePlayerSpeed = 0; // Or just a bool for normal speed?
 	// The Rocker
 	public bool rocker_carsDoCollide = false;
+	public int rocker_numberOfCarCollisions = 0;
 	public float rocker_carsCollisionForceMultiplier = 0;
 	public bool rocker_hasShieldUpgrade = false;
 	// The Radiologist
@@ -95,6 +96,7 @@ public class PlayerBuddy : MonoBehaviour {
 			if (temp_rocker_carsDoCollide == 1) {
 				rocker_carsDoCollide = true;
 			}
+			rocker_numberOfCarCollisions = PlayerPrefs.GetInt (PlayerConstants.Buddy_Rocker_NumberOfCarCollisions);
 			rocker_carsCollisionForceMultiplier = PlayerPrefs.GetFloat (PlayerConstants.Buddy_Rocker_CarsCollisionForceMultiplier);
 			int temp_rocker_hasShieldUpgrade = PlayerPrefs.GetInt (PlayerConstants.Buddy_Rocker_HasShieldUpgrade);
 			if (temp_rocker_hasShieldUpgrade == 1) {

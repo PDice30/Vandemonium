@@ -43,6 +43,7 @@ namespace UnityEngine {
 		public const string buddy_rocker_title = "The Rocker";
 		public const string Buddy_Rocker_Level = "Buddy_Rocker_Level";
 		public const string Buddy_Rocker_CarsDoCollide = "Buddy_Rocker_CarsDoCollide";
+		public const string Buddy_Rocker_NumberOfCarCollisions = "Buddy_Rocker_NumberOfCarCollisions";
 		public const string Buddy_Rocker_CarsCollisionForceMultiplier = "Buddy_Rocker_CarsCollisionForceMultiplier";
 		public const string Buddy_Rocker_HasShieldUpgrade = "Buddy_Rocker_HasShieldUpgrade";
 

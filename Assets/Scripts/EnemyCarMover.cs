@@ -13,6 +13,8 @@ public class EnemyCarMover : MonoBehaviour {
 	//private bool isMarkedForDestroy = false; // Currently not in use
 
 	private Rigidbody carRigidbody;
+	[SerializeField]
+	private int remainingCarCollisions;
 
 	//Make sure this is all hooked up properly with the finding of the levelSceneController
 	//Why is this not hooked up in the editor?
@@ -22,6 +24,7 @@ public class EnemyCarMover : MonoBehaviour {
 	}
 
 	void Start () {
+		remainingCarCollisions = 0;
 	//	sceneControllerObj = GameObject.Find ("SceneController");
 	//	sceneController = sceneControllerObj.GetComponent<SceneController> ();
 	}
@@ -43,15 +46,18 @@ public class EnemyCarMover : MonoBehaviour {
 	}
 
 	// Set up the car's colliders and physics properites so it can collide with the scene.
-	public void markForDestroy(int direction) {
+	public void markForDestroy(int direction, int remainingCollisions) {
 		//isMarkedForDestroy = true;
 		carRigidbody.useGravity = true;
 		carRigidbody.isKinematic = false;
+		remainingCarCollisions = remainingCollisions;
 		StartCoroutine (moveAndDestroy(direction));
 	}
 
 	void OnCollisionEnter(Collision coll) {
-		if (coll.gameObject.tag.Equals("EnemyCar")) {
+		if (coll.gameObject.tag.Equals("EnemyCar") && remainingCarCollisions >= 1) {
+			
+
 			/**********
 			*BuddyCheck here for if car's should collide with each other
 			/*********/
@@ -68,10 +74,10 @@ public class EnemyCarMover : MonoBehaviour {
 				if (carRigidbody.isKinematic && collRigidbody.isKinematic) {
 					//Do Nothing
 				} else if (!carRigidbody.isKinematic && collRigidbody.isKinematic) { // Coll
-					coll.gameObject.GetComponent<EnemyCarMover> ().markForDestroy (Random.Range (0, 2));
-				} else if (carRigidbody.isKinematic && !collRigidbody.isKinematic) { // this
-					markForDestroy(Random.Range(0, 2));
-				} else { //Both are marked for destroy
+					coll.gameObject.GetComponent<EnemyCarMover> ().markForDestroy (Random.Range (0, 2), remainingCarCollisions - 1);
+				} //else if (carRigidbody.isKinematic && !collRigidbody.isKinematic) { // this
+					//markForDestroy(Random.Range(0, 2));
+				else { //Both are marked for destroy
 
 				}
 			}

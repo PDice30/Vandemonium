@@ -6,6 +6,10 @@ using System.Collections.Generic;
 
 public class TitleSceneController : MonoBehaviour {
 
+	//TODO
+	//All of these game objects should probably just be their components
+	//when referring to the game object just use .gameobject
+
 	// Use this for initialization
 	public GameObject buddyOneChosen;
 	public GameObject buddyTwoChosen;
@@ -55,6 +59,8 @@ public class TitleSceneController : MonoBehaviour {
 	public GameObject achievementsCanvasObj;
 	public GameObject statsCanvasObj;
 
+	public Button resetPlayerPrefsButton;
+
 	private GameObject currentCanvasObj;
 
 	public LevelSceneController levelSceneController;
@@ -79,7 +85,7 @@ public class TitleSceneController : MonoBehaviour {
 		//If they have chronologist as buddy 1, keep it buddy 1.
 
 		//Will Only happen once
-		if (PlayerPrefs.GetInt ("Player_FirstTimePlaying", 0) == 1) {
+		if (PlayerPrefs.GetInt ("Player_FirstTimePlaying", 1) == 1) {
 			setupInitialPlayerPrefs ();
 		} 
 
@@ -182,6 +188,8 @@ public class TitleSceneController : MonoBehaviour {
 		buddyStatsImage.sprite = buddyImages [buddy.buddyId];
 		if (!buddy.isUnlocked) {
 			buddyStatsImage.color = Color.black;
+		} else {
+			buddyStatsImage.color = Color.white;
 		}
 		buddyStatsName.text = buddy.buddyName;
 		buddyStatsTitle.text = buddy.buddyTitle;
@@ -270,10 +278,11 @@ public class TitleSceneController : MonoBehaviour {
 		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Chronologist_CameraSlowdownPercentage, 0.5f);
 		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Chronologist_CameraSlowdownTime, 0f);
 		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Chronologist_RelativePlayerSpeed, 0f);
-		//Rocket Setup
+		//Rocker Setup
 		PlayerPrefs.SetInt (PlayerConstants.Player_HasUnlockedRocker, 1);
 		PlayerPrefs.SetInt (PlayerConstants.Buddy_Rocker_Level, 1);
 		PlayerPrefs.SetInt (PlayerConstants.Buddy_Rocker_CarsDoCollide, 1);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Rocker_NumberOfCarCollisions, 1);
 		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Rocker_CarsCollisionForceMultiplier, 1.5f);
 		PlayerPrefs.SetInt (PlayerConstants.Buddy_Rocker_HasShieldUpgrade, 0);
 		//Radiologist Setup
@@ -323,6 +332,8 @@ public class TitleSceneController : MonoBehaviour {
 		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Doomsayer_GoodSpeechBubbleSize, 2f);
 		PlayerPrefs.SetInt (PlayerConstants.Buddy_Doomsayer_CanEnterBubbleBlast, 0);
 
+		PlayerPrefs.Save ();
+
 		//
 		Debug.Log ("First Time Setup complete");
 
@@ -330,6 +341,77 @@ public class TitleSceneController : MonoBehaviour {
 
 	void getPlayerPrefs() {
 		
+	}
+
+	public void resetPlayerPrefs() {
+		//Player Setup
+		PlayerPrefs.SetInt(PlayerConstants.Player_TotalCoins, 0);
+		PlayerPrefs.SetInt(PlayerConstants.Player_BestScore, 0);
+		PlayerPrefs.SetInt(PlayerConstants.Player_BestCoins, 0);
+		PlayerPrefs.SetInt(PlayerConstants.Player_BestZone, 0);
+		//Chronologist Setup
+		PlayerPrefs.SetInt (PlayerConstants.Player_HasUnlockedChronologist, 1);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Chronologist_Level, 1);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Chronologist_CameraSlowdownPercentage, 0.5f);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Chronologist_CameraSlowdownTime, 0f);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Chronologist_RelativePlayerSpeed, 0f);
+		//Rocket Setup
+		PlayerPrefs.SetInt (PlayerConstants.Player_HasUnlockedRocker, 1);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Rocker_Level, 1);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Rocker_CarsDoCollide, 1);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Rocker_NumberOfCarCollisions, 1);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Rocker_CarsCollisionForceMultiplier, 1.5f);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Rocker_HasShieldUpgrade, 0);
+		//Radiologist Setup
+		PlayerPrefs.SetInt (PlayerConstants.Player_HasUnlockedRadiologist, 1);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Radiologist_Level, 1);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Radiologist_XRayTime, 2.0f);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Radiologist_HasNightVision, 0);
+		//Pilferer Setup
+		PlayerPrefs.SetInt (PlayerConstants.Player_HasUnlockedPilferer, 1);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Pilferer_Level, 1);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Pilferer_DayCoinBonus, 1.05f);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Pilferer_NightCoinBonus, 1.1f);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Pilferer_CanMarkCarWithTreasure, 0);
+		//Medium Setup
+		PlayerPrefs.SetInt (PlayerConstants.Player_HasUnlockedMedium, 1);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Medium_Level, 1);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Medium_AdditionalCrystalFrequency, 1.2f);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Medium_CrystalDurationBonus, 2f);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Medium_IsInvulnerableDuringCrystal, 0);
+		//Sidewinder Setup
+		PlayerPrefs.SetInt (PlayerConstants.Player_HasUnlockedSidewinder, 0);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Sidewinder_Level, 1);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Sidewinder_LaneChangeSpeed, 1.5f);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Sidewinder_HasTeleport, 0);
+		//Diviner Setup
+		PlayerPrefs.SetInt (PlayerConstants.Player_HasUnlockedDiviner, 0);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Diviner_Level, 1);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Diviner_ShieldDuration, 2f);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Diviner_HasDestroyAllCarsOnDamage, 0);
+		//Mechanic Setup
+		PlayerPrefs.SetInt (PlayerConstants.Player_HasUnlockedMechanic, 0);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Mechanic_Level, 1);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Mechanic_ExtraHealth, 1);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Mechanic_AdditionalHealthSpawnFrequency, 1.2f);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Mechanic_CanActivateSavior, 0);
+		//Jester Setup
+		PlayerPrefs.SetInt (PlayerConstants.Player_HasUnlockedJester, 0);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Jester_Level, 1);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Jester_LaneChangeFrequency, 10f);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Jester_CameraChangeRefillBonus, 2f);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Jester_CanIgnoreDamage, 0);
+		//Doomsayer Setup
+		PlayerPrefs.SetInt (PlayerConstants.Player_HasUnlockedDoomsayer, 0);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Doomsayer_Level, 1);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Doomsayer_SpeechBubbleFrequency, 10f);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Doomsayer_BadSpeechBubbleSize, 10f);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Doomsayer_GoodSpeechBubbleSize, 2f);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Doomsayer_CanEnterBubbleBlast, 0);
+
+		PlayerPrefs.Save ();
+
+		Debug.Log ("Prefs Reset");
 	}
 		
 	private void resetCanvasesAndCameras() {

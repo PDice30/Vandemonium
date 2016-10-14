@@ -38,7 +38,7 @@ public class BridgeSpawner : MonoBehaviour {
 	private void setupNewBridge(GameObject bridge) {
 		MiscObjectMover mover = bridge.GetComponent<MiscObjectMover> ();
 		mover.setVelocity (SceneConstants.BASE_OBJECT_VELOCITY);
-		float width = Random.Range (0.5f, 2f);
+		float width = Random.Range (1.0f, 4f);
 		bridge.transform.localScale = new Vector3 (1, 1, width);
 	}
 }
