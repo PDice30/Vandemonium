@@ -328,7 +328,7 @@ public class TitleSceneController : MonoBehaviour {
 		PlayerPrefs.SetInt (PlayerConstants.Player_HasUnlockedDoomsayer, 0);
 		PlayerPrefs.SetInt (PlayerConstants.Buddy_Doomsayer_Level, 1);
 		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Doomsayer_SpeechBubbleFrequency, 10f);
-		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Doomsayer_BadSpeechBubbleSize, 10f);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Doomsayer_BadSpeechBubbleSize, .5f);
 		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Doomsayer_GoodSpeechBubbleSize, 2f);
 		PlayerPrefs.SetInt (PlayerConstants.Buddy_Doomsayer_CanEnterBubbleBlast, 0);
 
@@ -405,7 +405,7 @@ public class TitleSceneController : MonoBehaviour {
 		PlayerPrefs.SetInt (PlayerConstants.Player_HasUnlockedDoomsayer, 0);
 		PlayerPrefs.SetInt (PlayerConstants.Buddy_Doomsayer_Level, 1);
 		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Doomsayer_SpeechBubbleFrequency, 10f);
-		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Doomsayer_BadSpeechBubbleSize, 10f);
+		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Doomsayer_BadSpeechBubbleSize, .5f);
 		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Doomsayer_GoodSpeechBubbleSize, 2f);
 		PlayerPrefs.SetInt (PlayerConstants.Buddy_Doomsayer_CanEnterBubbleBlast, 0);
 

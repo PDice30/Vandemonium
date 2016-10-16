@@ -4,18 +4,21 @@ using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 
-//TODO are two scene controllers even necessary?
+/********
+ * LevelSceneController
+ * - Handles everything related to the level scene itself, like the cameras, object generation, scene speed
+ * - Currently handles UI components for the scene as well
+ ********/ 
 public class LevelSceneController : MonoBehaviour {
-
-	public LightController lightController;
-	public Camera playerCamera;
+	//Controllers and Input Handlers
 	private TitleSceneController titleSceneController;
+	public PlayerInputHandler inputHandler;
+	public LightController lightController;
 
-	public List<PlayerBuddy> playerBuddies;
+	public List<PlayerBuddy> playerBuddies; //The list of player buddies received from the TitleSC
 
 	public GameObject playerCarPrefab;
-
-
+	//Lanes created based on criteria set in the generateLanes function based on this prefab
 	public List<Lane> lanes;
 	public GameObject lanePrefab;
 
@@ -28,10 +31,20 @@ public class LevelSceneController : MonoBehaviour {
 
 	private float timeInCurrentZone = 0;
 	private float gameStartTime = 0;
+	private float totalGameTime = 0;
 
+	//Cameras and such
+	public Camera playerCamera;
+	public Transform playerCamTransform;
+	public Transform currentCamTransform; //Which of the possible cam transforms is it actually looking at
+	public Transform introCam;
+	public Transform topCam;
+	public Transform sideCam;
+	public Transform frontCam;
 
 	//Game Over Canvas Items
 	public GameObject gameOverCanvasObj;
+	public GameObject doomsayerPanel;
 	public Text currentScoreText;
 	public Text currentCoinsText;
 	public Text currentZoneText;
@@ -40,7 +53,16 @@ public class LevelSceneController : MonoBehaviour {
 	public Text bestZoneText;
 	public Text totalCoinsText;
 
-	public float SCENE_SPEED;
+	public float cameraChangeTime; //Will eventually just be handled by the Buddies
+
+	//Increases and decreases based on zone, power ups, buddies, etc. Handles all objects' speeds!
+	public float SCENE_SPEED; 
+
+	//Buddy specific vars
+	public float buddy_doomsayerFrequency;
+	public float buddy_doomsayerTimeUntilNext;
+	public GameObject doomsayerBubbleButtonPrefab;
+	public bool player_isUsingDoomsayer;
 
 	//Could just be a list
 	public ArrayList itemsToDestroy = new ArrayList();
@@ -54,26 +76,65 @@ public class LevelSceneController : MonoBehaviour {
 		getBuddies (titleSceneController.finalChosenPlayerBuddies);
 		SCENE_SPEED = SceneConstants.BASE_SCENE_SPEED;
 
+		//When the player leaves this scene, make sure to destroy objects previously set to not do so
 		foreach (PlayerBuddy buddy in playerBuddies) {
 			itemsToDestroy.Add (buddy.gameObject);
 		}
 		itemsToDestroy.Add (titleSceneController.gameObject);
 
+		//Based on the function, determine how many, width, etc of lanes
 		lanes = generateLanes (5, -6f, 2f, 3f);
 
 	}
 
 	void Start () {
 		//TODO Player spawned based on lanes
+		//Instantiate the car and set up the components necessary for input etc.
 		GameObject playerCar = Instantiate (playerCarPrefab, new Vector3 (0f, 0.5f, -10f), Quaternion.identity) as GameObject;
 		lightController.PlayerSpotlight = playerCar.GetComponentInChildren<Light> ();
-		//playerCarPrefab.GetComponent<PlayerController> ().sceneController = gameObject.GetComponent<SceneController> ();
-		gameStartTime = Time.time;
+		inputHandler = playerCar.GetComponent<PlayerInputHandler> ();
+
+		//Set the transforms for the playerCam and currentCam for use in the Change camera functions
+		playerCamTransform = playerCamera.transform;
+		currentCamTransform = introCam;
+
+		cameraChangeTime = 1.0f;
+
+
+		gameStartTime = Time.time; //Keeping track of the zone time etc.
+
+		/**********
+		*BuddyCheck here for DoomSayer
+		/*********/
+		foreach (PlayerBuddy buddy in playerBuddies) {
+			if (buddy.buddyCheck(BuddySkillEnum.Doomsayer)) {
+				player_isUsingDoomsayer = true;
+				buddy_doomsayerFrequency = buddy.doomsayer_speechBubbleFrequency;
+				buddy_doomsayerTimeUntilNext = buddy.doomsayer_speechBubbleFrequency;
+			}
+		}
+
+		//Start the scene by zooming out from the car
+		StartCoroutine(startIntro(topCam));
 	}
 	void Update () {
+		if (player_isUsingDoomsayer) {
+			buddy_doomsayerTimeUntilNext -= Time.deltaTime;
+			if (buddy_doomsayerTimeUntilNext <= 0) {
+				foreach (PlayerBuddy buddy in playerBuddies) {
+					if (buddy.buddyCheck(BuddySkillEnum.Doomsayer)) {
+						spawnDoomsayerBubble (buddy.doomsayer_badSpeechBubbleSize, buddy.doomsayer_goodSpeechBubbleSize);
+					}
+				}
+				buddy_doomsayerTimeUntilNext = buddy_doomsayerFrequency;
+			}
+		}
+			
+
+
 		//Testing Zone Transitions etc.
 		timeInCurrentZone += Time.deltaTime;
-
+		//Zone time
 		if (Time.time - gameStartTime >= 10) {
 			Debug.Log ("" + timeInCurrentZone);
 			gameStartTime = Time.time;
@@ -89,6 +150,7 @@ public class LevelSceneController : MonoBehaviour {
 		playerBuddies = buddies;
 	}
 
+	// Destroy buddies and titleSC when going back to main menu
 	public void destroyItemsOnChange() {
 		foreach (GameObject item in itemsToDestroy) {
 			Destroy (item);
@@ -149,6 +211,69 @@ public class LevelSceneController : MonoBehaviour {
 		//SceneManager.LoadScene("TitleScene");
 	}
 
+	//Function to move camera should have inputs based on the player's camera slowdown level
+	public IEnumerator changeCamera(Transform targetCamTransform, float changeTime) {
+		/**********
+		*BuddyCheck here for Chronologist slowdown and Radiologist XRay
+		/*********/
+		//GameObject.Find("CarSpawner").GetComponent<CarSpawner>().enemyCarPrefab.GetComponent<MeshRenderer>().material = Resources.Load ("Enemy_Car_XRay") as Material;
+		//Cant change the prefab, instead change the material when it is instantiated
+		foreach (PlayerBuddy buddy in playerBuddies) {
+			//Null check probably not necessary
+			if (buddy != null) {
+				if (buddy.buddyCheck(BuddySkillEnum.Chronologist)) { // Returns true if buddy has that skill
+					Time.timeScale = (Time.timeScale * buddy.chronologist_cameraSlowdownPercentage);
+				}
+				if (buddy.buddyCheck (BuddySkillEnum.Radiologist)) {
+					//Transform all car meshes into the Xray material
+					GameObject[] enemyCarArray = GameObject.FindGameObjectsWithTag ("EnemyCar");
+					for (int i = 0; i < enemyCarArray.Length; i++) {
+						enemyCarArray [i].GetComponent<MeshRenderer> ().material = Resources.Load ("Enemy_Car_XRay") as Material;
+					}
+
+					//Transform all bridge pieces into the Xray material
+					GameObject[] bridgeArray = GameObject.FindGameObjectsWithTag ("Bridge");
+					for (int i = 0; i < bridgeArray.Length; i++) {
+						foreach (MeshRenderer mesh in bridgeArray[i].GetComponentsInChildren<MeshRenderer>()) {
+							mesh.material = Resources.Load ("Enemy_Car_XRay") as Material;
+						}
+					}
+				}	
+			}
+		}
+
+		//Maybe set timeLeft higher and then subtract delta time? Makes more sense that way.
+		float timeLeft = 0;
+		while (timeLeft < changeTime) {
+			timeLeft += Time.deltaTime;
+			playerCamTransform.position = Vector3.Lerp (currentCamTransform.position, targetCamTransform.position, (timeLeft / changeTime));
+			//Quaternion.Slerp here maybe?
+			playerCamTransform.rotation = Quaternion.Lerp (currentCamTransform.rotation, targetCamTransform.rotation, (timeLeft / changeTime));
+			yield return null;
+		}
+
+		//Reset timescale if it was affected by a Buddy skill
+		Time.timeScale = 1.0f;
+		currentCamTransform = targetCamTransform;
+		inputHandler.isCameraMoving = false;
+	}
+
+	//Starts on level start, transitions camera from the current intro cam spot to the normal top cam position
+	private IEnumerator startIntro(Transform targetCamTransform) {
+		float timeLeft = 0;
+		float changeTime = 2;
+		while (timeLeft < changeTime) {
+			timeLeft += Time.deltaTime;
+			playerCamTransform.position = Vector3.Lerp (currentCamTransform.position, targetCamTransform.position, (timeLeft / changeTime));
+			playerCamTransform.rotation = Quaternion.Lerp (currentCamTransform.rotation, targetCamTransform.rotation, (timeLeft / changeTime));
+			yield return null;
+		}
+		currentCamTransform = targetCamTransform;
+
+		inputHandler.isCameraMoving = false;
+		inputHandler.inputEnabled = true;
+	}
+
 	public List<Lane> generateLanes(int numberOfLanes, float xPos, float laneWidth, float laneSpacing) {
 		List<Lane> newLaneList = new List<Lane> ();
 		for (int i = 0; i < numberOfLanes; i++) {
@@ -163,10 +288,40 @@ public class LevelSceneController : MonoBehaviour {
 			newLaneList.Add(newLane.GetComponent<Lane>());
 			xPos += laneSpacing;
 		}
-
 		return newLaneList;
 	}
 
+	public void spawnDoomsayerBubble(float badBubbleSize, float goodBubbleSize) {
+		GameObject newDoomsayerBubble = Instantiate (doomsayerBubbleButtonPrefab, new Vector3 (0, 0, 0), Quaternion.identity) as GameObject;
+		RectTransform bubbleRect = newDoomsayerBubble.GetComponent<RectTransform> ();
+		float anchorRange = Random.Range (0.1f, 0.4f);
+		Vector2 newMinAnchor = new Vector2 (anchorRange, anchorRange);
+		Vector2 newMaxAnchor = new Vector2 (anchorRange + badBubbleSize, anchorRange + badBubbleSize);
+		bubbleRect.anchorMin = newMinAnchor;
+		bubbleRect.anchorMax = newMaxAnchor;
+
+		newDoomsayerBubble.GetComponent<RectTransform> ().SetParent (doomsayerPanel.transform, false);
+		newDoomsayerBubble.GetComponent<Button>().onClick.AddListener(() => { 
+			doomsayerBubbleClicked(newDoomsayerBubble.GetComponent<Button>()); 
+		});
+	}
+
+	public void doomsayerBubbleClicked(Button doomsayerBubbleButton) {
+		Vector2 origAnchorMin = doomsayerBubbleButton.GetComponent<RectTransform> ().anchorMin;
+		Vector2 origAnchorMax = doomsayerBubbleButton.GetComponent<RectTransform> ().anchorMax;
+		origAnchorMin.x += 0.05f;
+		origAnchorMax.x -= 0.05f;
+		origAnchorMin.y += 0.05f;
+		origAnchorMax.y -= 0.05f;
+
+		//Bubble has grown small and should be destroyed
+		if (origAnchorMax.x - origAnchorMin.x <= .1f) {
+			Destroy (doomsayerBubbleButton.gameObject);
+		} else {
+			doomsayerBubbleButton.GetComponent<RectTransform> ().anchorMin = origAnchorMin;
+			doomsayerBubbleButton.GetComponent<RectTransform> ().anchorMax = origAnchorMax;
+		}
+	}
 }
 
 
