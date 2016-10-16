@@ -7,9 +7,10 @@ namespace UnityEngine {
 
 		public const float BASE_SCENE_SPEED = 3.0f;
 
-		public const float BASIC_CAR_SPAWN_TIME = 1.2f;
-		public const float BASIC_BRIDGE_SPAWN_TIME = 60.0f;
+		public const float BASIC_CAR_SPAWN_TIME = 1.5f;
+		public const float BASIC_BRIDGE_SPAWN_TIME = 90.0f;
 		public const float BASIC_TERRAIN_SPAWN_TIME = 1.0f;
+		public const int TERRAIN_LEFT_SIDE_ONLY = 0;
 
 		public const float BASE_CAR_VELOCITY = 1.0f;
 		//Other car velocities

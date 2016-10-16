@@ -13,7 +13,7 @@ public class EnemyCarMover : MonoBehaviour {
 	//private bool isMarkedForDestroy = false; // Currently not in use
 
 	private Rigidbody carRigidbody;
-	[SerializeField]
+	[SerializeField] //For Debugging
 	private int remainingCarCollisions;
 
 	//Make sure this is all hooked up properly with the finding of the levelSceneController
@@ -54,38 +54,6 @@ public class EnemyCarMover : MonoBehaviour {
 		StartCoroutine (moveAndDestroy(direction));
 	}
 
-	void OnCollisionEnter(Collision coll) {
-		if (coll.gameObject.tag.Equals("EnemyCar") && remainingCarCollisions >= 1) {
-			
-
-			/**********
-			*BuddyCheck here for if car's should collide with each other
-			/*********/
-			bool playerHasRockerBuddy = false;
-			foreach (PlayerBuddy buddy in levelSceneController.playerBuddies) {
-				if (buddy.buddyCheck (BuddySkillEnum.Rocker)) {
-					playerHasRockerBuddy = true;
-
-				}
-			}
-
-			if (playerHasRockerBuddy) {
-				Rigidbody collRigidbody = coll.gameObject.GetComponent<Rigidbody> ();
-				if (carRigidbody.isKinematic && collRigidbody.isKinematic) {
-					//Do Nothing
-				} else if (!carRigidbody.isKinematic && collRigidbody.isKinematic) { // Coll
-					coll.gameObject.GetComponent<EnemyCarMover> ().markForDestroy (Random.Range (0, 2), remainingCarCollisions - 1);
-				} //else if (carRigidbody.isKinematic && !collRigidbody.isKinematic) { // this
-					//markForDestroy(Random.Range(0, 2));
-				else { //Both are marked for destroy
-
-				}
-			}
-
-		}
-	}
-
-
 	/***
 	 * Get the direction the player is moving and apply a force to the car in that direction
 	 * Destroy the actual object after TIME_UNTIL_DESTROY_CAR finishes
@@ -111,18 +79,10 @@ public class EnemyCarMover : MonoBehaviour {
 			zForce = Random.Range (SceneConstants.ZFORCE_COLLISION_MIN, SceneConstants.ZFORCE_COLLISION_MAX) * rocker_carsCollisionForceMultiplier * SceneConstants.FORCE_TEST_MULTIPLIER;
 		}
 			
-
 		yForce = Random.Range (SceneConstants.YFORCE_COLLISION_MIN, SceneConstants.YFORCE_COLLISION_MAX);
 		carRigidbody.AddForce (new Vector3 (xForce, yForce, zForce));
 		carRigidbody.AddTorque (new Vector3 (xForce, yForce, zForce));
 
-		//Time until destruction, change this
-		//Copy implementation from changeCamera in PlayerController
-		//Otherwise it varies on framerate
-//		for (int i = 0; i < SceneConstants.TIME_UNTIL_DESTROY_CAR; i++) {
-//			yield return null;
-//		}
-			
 		float timeLeft = 0;
 		while (timeLeft < SceneConstants.TIME_UNTIL_DESTROY_CAR) {
 			timeLeft += Time.deltaTime;
@@ -131,5 +91,34 @@ public class EnemyCarMover : MonoBehaviour {
 
 		Destroy (gameObject);
 	}
+
+	void OnCollisionEnter(Collision coll) {
+		if (coll.gameObject.tag.Equals("EnemyCar") && remainingCarCollisions >= 1) {
+			/**********
+			*BuddyCheck here for if car's should collide with each other
+			/*********/
+			bool playerHasRockerBuddy = false;
+			foreach (PlayerBuddy buddy in levelSceneController.playerBuddies) {
+				if (buddy.buddyCheck (BuddySkillEnum.Rocker)) {
+					playerHasRockerBuddy = true;
+				}
+			}
+
+			if (playerHasRockerBuddy) {
+				Rigidbody collRigidbody = coll.gameObject.GetComponent<Rigidbody> ();
+				if (carRigidbody.isKinematic && collRigidbody.isKinematic) {
+					//Do Nothing
+				} else if (!carRigidbody.isKinematic && collRigidbody.isKinematic) { // Coll
+					coll.gameObject.GetComponent<EnemyCarMover> ().markForDestroy (Random.Range (0, 2), remainingCarCollisions - 1);
+				} //else if (carRigidbody.isKinematic && !collRigidbody.isKinematic) { // this
+					//markForDestroy(Random.Range(0, 2));
+				else { //Both are marked for destroy
+
+				}
+			}
+		}
+	}
+		
+
 
 }
