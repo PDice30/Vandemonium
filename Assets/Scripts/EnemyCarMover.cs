@@ -117,7 +117,12 @@ public class EnemyCarMover : MonoBehaviour {
 				}
 			}
 		}
+
+		if (coll.gameObject.tag.Equals ("DoomsayerBubble")) {
+			this.markForDestroy (Random.Range (0, 2), 5); 
+		}
 	}
+		
 		
 
 

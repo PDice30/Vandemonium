@@ -18,6 +18,7 @@ public class LevelSceneController : MonoBehaviour {
 	public List<PlayerBuddy> playerBuddies; //The list of player buddies received from the TitleSC
 
 	public GameObject playerCarPrefab;
+	private GameObject playerCarObj;
 	//Lanes created based on criteria set in the generateLanes function based on this prefab
 	public List<Lane> lanes;
 	public GameObject lanePrefab;
@@ -61,6 +62,7 @@ public class LevelSceneController : MonoBehaviour {
 	//Buddy specific vars
 	public float buddy_doomsayerFrequency;
 	public float buddy_doomsayerTimeUntilNext;
+	public GameObject doomsayerGoodBubblePrefab;
 	public GameObject doomsayerBubbleButtonPrefab;
 	public bool player_isUsingDoomsayer;
 
@@ -92,6 +94,7 @@ public class LevelSceneController : MonoBehaviour {
 		//Instantiate the car and set up the components necessary for input etc.
 		GameObject playerCar = Instantiate (playerCarPrefab, new Vector3 (0f, 0.5f, -10f), Quaternion.identity) as GameObject;
 		lightController.PlayerSpotlight = playerCar.GetComponentInChildren<Light> ();
+		playerCarObj = playerCar;
 		inputHandler = playerCar.GetComponent<PlayerInputHandler> ();
 
 		//Set the transforms for the playerCam and currentCam for use in the Change camera functions
@@ -291,6 +294,11 @@ public class LevelSceneController : MonoBehaviour {
 		return newLaneList;
 	}
 
+
+	/************
+	 * 
+	 * Doomsayer Functions for Bubbles etc.
+	 */
 	public void spawnDoomsayerBubble(float badBubbleSize, float goodBubbleSize) {
 		GameObject newDoomsayerBubble = Instantiate (doomsayerBubbleButtonPrefab, new Vector3 (0, 0, 0), Quaternion.identity) as GameObject;
 		RectTransform bubbleRect = newDoomsayerBubble.GetComponent<RectTransform> ();
@@ -307,20 +315,32 @@ public class LevelSceneController : MonoBehaviour {
 	}
 
 	public void doomsayerBubbleClicked(Button doomsayerBubbleButton) {
-		Vector2 origAnchorMin = doomsayerBubbleButton.GetComponent<RectTransform> ().anchorMin;
-		Vector2 origAnchorMax = doomsayerBubbleButton.GetComponent<RectTransform> ().anchorMax;
-		origAnchorMin.x += 0.05f;
-		origAnchorMax.x -= 0.05f;
-		origAnchorMin.y += 0.05f;
-		origAnchorMax.y -= 0.05f;
+		Vector2 newAnchorMin = doomsayerBubbleButton.GetComponent<RectTransform> ().anchorMin;
+		Vector2 newAnchorMax = doomsayerBubbleButton.GetComponent<RectTransform> ().anchorMax;
+		newAnchorMin.x += 0.05f;
+		newAnchorMax.x -= 0.05f;
+		newAnchorMin.y += 0.05f;
+		newAnchorMax.y -= 0.05f;
 
 		//Bubble has grown small and should be destroyed
-		if (origAnchorMax.x - origAnchorMin.x <= .1f) {
+		if (newAnchorMax.x - newAnchorMin.x <= .1f) {
 			Destroy (doomsayerBubbleButton.gameObject);
+			//Throw out a good bubble
+			doomsayerSpawnGoodBubble();
 		} else {
-			doomsayerBubbleButton.GetComponent<RectTransform> ().anchorMin = origAnchorMin;
-			doomsayerBubbleButton.GetComponent<RectTransform> ().anchorMax = origAnchorMax;
+			doomsayerBubbleButton.GetComponent<RectTransform> ().anchorMin = newAnchorMin;
+			doomsayerBubbleButton.GetComponent<RectTransform> ().anchorMax = newAnchorMax;
 		}
+	}
+
+	//Need to destroy this bubble
+	public void doomsayerSpawnGoodBubble() {
+		Vector3 spawnPos = playerCarObj.transform.position;
+		spawnPos.z += 2;
+		GameObject goodBubble = Instantiate (doomsayerGoodBubblePrefab, spawnPos, Quaternion.identity) as GameObject;
+		goodBubble.GetComponent<Rigidbody> ().AddForce (new Vector3 (0, 300, 2000));
+		goodBubble.GetComponent<Rigidbody> ().AddTorque (new Vector3 (300, 300, 300));
+		goodBubble.AddComponent<MiscObjectMover> ();
 	}
 }
 

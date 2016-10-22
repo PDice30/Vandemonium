@@ -1,18 +1,18 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\PlayerBuddy.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\LevelSceneController.cs">
     <Files>
-      <File FileName="Assets\Scripts\TitleSceneController.cs" Line="106" Column="23" />
-      <File FileName="Assets\Scripts\SceneConstants.cs" Line="37" Column="38" />
-      <File FileName="Assets\Scripts\BridgeSpawner.cs" Line="26" Column="2" />
-      <File FileName="Assets\Scripts\PlayerController.cs" Line="14" Column="39" />
-      <File FileName="Assets\Scripts\EnemyCarMover.cs" Line="98" Column="57" />
+      <File FileName="Assets\Scripts\TitleSceneController.cs" Line="103" Column="4" />
+      <File FileName="Assets\Scripts\SceneConstants.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\BridgeSpawner.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\PlayerController.cs" Line="18" Column="26" />
+      <File FileName="Assets\Scripts\EnemyCarMover.cs" Line="105" Column="5" />
       <File FileName="Assets\Scripts\CarSpawner.cs" Line="16" Column="27" NotebookId="1" />
-      <File FileName="Assets\Scripts\PlayerBuddy.cs" Line="205" Column="19" NotebookId="1" />
-      <File FileName="Assets\Scripts\PlayerConstants.cs" Line="100" Column="38" NotebookId="1" />
-      <File FileName="Assets\Scripts\TerrainSpawner.cs" Line="50" Column="13" NotebookId="1" />
-      <File FileName="Assets\PlayerInputHandler.cs" Line="44" Column="45" NotebookId="1" />
-      <File FileName="Assets\Scripts\LevelSceneController.cs" Line="313" Column="28" NotebookId="1" />
+      <File FileName="Assets\Scripts\PlayerBuddy.cs" Line="186" Column="65" NotebookId="1" />
+      <File FileName="Assets\Scripts\PlayerConstants.cs" Line="1" Column="1" NotebookId="1" />
+      <File FileName="Assets\Scripts\TerrainSpawner.cs" Line="1" Column="1" NotebookId="1" />
+      <File FileName="Assets\Scripts\LevelSceneController.cs" Line="336" Column="31" NotebookId="1" />
+      <File FileName="Assets\Scripts\MiscObjectMover.cs" Line="13" Column="2" NotebookId="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
