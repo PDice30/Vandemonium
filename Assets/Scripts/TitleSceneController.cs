@@ -32,7 +32,6 @@ public class TitleSceneController : MonoBehaviour {
 	public Text buddyStatsTitle;
 
 
-
 	public GameObject buddyScrollView;
 	public GameObject buddyScrollViewContent;
 
@@ -234,6 +233,7 @@ public class TitleSceneController : MonoBehaviour {
 	}
 
 	public void menuButtonClicked(Button menuButton) {
+		// Convert to switch
 		if (menuButton.name == "ButtonToPlay") {
 			currentCanvasObj.SetActive (false);
 			playCanvasObj.SetActive (true);
@@ -282,7 +282,7 @@ public class TitleSceneController : MonoBehaviour {
 		PlayerPrefs.SetInt (PlayerConstants.Player_HasUnlockedRocker, 1);
 		PlayerPrefs.SetInt (PlayerConstants.Buddy_Rocker_Level, 1);
 		PlayerPrefs.SetInt (PlayerConstants.Buddy_Rocker_CarsDoCollide, 1);
-		PlayerPrefs.SetInt (PlayerConstants.Buddy_Rocker_NumberOfCarCollisions, 1);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Rocker_NumberOfCarCollisions, 5);
 		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Rocker_CarsCollisionForceMultiplier, 1.5f);
 		PlayerPrefs.SetInt (PlayerConstants.Buddy_Rocker_HasShieldUpgrade, 0);
 		//Radiologist Setup
@@ -359,7 +359,7 @@ public class TitleSceneController : MonoBehaviour {
 		PlayerPrefs.SetInt (PlayerConstants.Player_HasUnlockedRocker, 1);
 		PlayerPrefs.SetInt (PlayerConstants.Buddy_Rocker_Level, 1);
 		PlayerPrefs.SetInt (PlayerConstants.Buddy_Rocker_CarsDoCollide, 1);
-		PlayerPrefs.SetInt (PlayerConstants.Buddy_Rocker_NumberOfCarCollisions, 1);
+		PlayerPrefs.SetInt (PlayerConstants.Buddy_Rocker_NumberOfCarCollisions, 5);
 		PlayerPrefs.SetFloat (PlayerConstants.Buddy_Rocker_CarsCollisionForceMultiplier, 1.5f);
 		PlayerPrefs.SetInt (PlayerConstants.Buddy_Rocker_HasShieldUpgrade, 0);
 		//Radiologist Setup

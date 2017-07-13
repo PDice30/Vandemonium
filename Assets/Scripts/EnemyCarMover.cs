@@ -97,14 +97,17 @@ public class EnemyCarMover : MonoBehaviour {
 			/**********
 			*BuddyCheck here for if car's should collide with each other
 			/*********/
+			/*
 			bool playerHasRockerBuddy = false;
 			foreach (PlayerBuddy buddy in levelSceneController.playerBuddies) {
 				if (buddy.buddyCheck (BuddySkillEnum.Rocker)) {
 					playerHasRockerBuddy = true;
 				}
 			}
+			*/
+			// bool playerHasRockerBuddy = levelSceneController.buddyCheck(BuddySkillEnum.Rocker);
 
-			if (playerHasRockerBuddy) {
+			if (levelSceneController.buddyCheck(BuddySkillEnum.Rocker) != null) {
 				Rigidbody collRigidbody = coll.gameObject.GetComponent<Rigidbody> ();
 				if (carRigidbody.isKinematic && collRigidbody.isKinematic) {
 					//Do Nothing

@@ -70,6 +70,7 @@ public class PlayerBuddy : MonoBehaviour {
 		copiedBuddy.buddyId = buddyId;
 	}
 
+	// Helper method to generate buddy stats when the game starts or goes to TitleSC
 	public void getBuddyStats() {
 		switch (buddySkillEnum) {
 		case BuddySkillEnum.Chronologist:
@@ -228,7 +229,7 @@ public class PlayerBuddy : MonoBehaviour {
 
 	}
 
-
+	// todo: Handled here or in LevelSC?
 	/**
 	 * Checks if this buddy matches the enum being searched
 	 */ 

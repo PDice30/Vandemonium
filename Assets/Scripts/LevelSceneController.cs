@@ -107,7 +107,7 @@ public class LevelSceneController : MonoBehaviour {
 		gameStartTime = Time.time; //Keeping track of the zone time etc.
 
 		/**********
-		*BuddyCheck here for DoomSayer
+		* BuddyCheck here for DoomSayer
 		/*********/
 		foreach (PlayerBuddy buddy in playerBuddies) {
 			if (buddy.buddyCheck(BuddySkillEnum.Doomsayer)) {
@@ -217,7 +217,7 @@ public class LevelSceneController : MonoBehaviour {
 	//Function to move camera should have inputs based on the player's camera slowdown level
 	public IEnumerator changeCamera(Transform targetCamTransform, float changeTime) {
 		/**********
-		*BuddyCheck here for Chronologist slowdown and Radiologist XRay
+		* BuddyCheck here for Chronologist slowdown and Radiologist XRay
 		/*********/
 		//GameObject.Find("CarSpawner").GetComponent<CarSpawner>().enemyCarPrefab.GetComponent<MeshRenderer>().material = Resources.Load ("Enemy_Car_XRay") as Material;
 		//Cant change the prefab, instead change the material when it is instantiated
@@ -227,7 +227,7 @@ public class LevelSceneController : MonoBehaviour {
 				if (buddy.buddyCheck(BuddySkillEnum.Chronologist)) { // Returns true if buddy has that skill
 					Time.timeScale = (Time.timeScale * buddy.chronologist_cameraSlowdownPercentage);
 				}
-				if (buddy.buddyCheck (BuddySkillEnum.Radiologist)) {
+				if (buddy.buddyCheck(BuddySkillEnum.Radiologist)) {
 					//Transform all car meshes into the Xray material
 					GameObject[] enemyCarArray = GameObject.FindGameObjectsWithTag ("EnemyCar");
 					for (int i = 0; i < enemyCarArray.Length; i++) {
@@ -341,6 +341,16 @@ public class LevelSceneController : MonoBehaviour {
 		goodBubble.GetComponent<Rigidbody> ().AddForce (new Vector3 (0, 300, 2000));
 		goodBubble.GetComponent<Rigidbody> ().AddTorque (new Vector3 (300, 300, 300));
 		goodBubble.AddComponent<MiscObjectMover> ();
+	}
+
+	// todo: Handled here or in PlayerBuddy?
+	public PlayerBuddy buddyCheck(BuddySkillEnum buddyCheckId) {
+		foreach (PlayerBuddy buddy in playerBuddies) {
+			if (buddy.buddySkillEnum == buddyCheckId) {
+				return buddy;
+			}
+		}
+		return null;
 	}
 }
 

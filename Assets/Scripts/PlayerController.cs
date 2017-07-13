@@ -116,7 +116,7 @@ public class PlayerController : MonoBehaviour {
 				if (playerHealth <= 0) {
 					levelSC.beginGameOver ();
 				}	
-
+					
 				foreach (PlayerBuddy buddy in levelSC.playerBuddies) {
 					if (buddy.buddyCheck (BuddySkillEnum.Rocker)) {
 						remainingCarCollisions = buddy.rocker_numberOfCarCollisions;
